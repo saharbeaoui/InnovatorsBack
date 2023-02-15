@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,9 +32,11 @@ public class BlockFoyer {
     @Column(name = "placement")
     private String placement;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "blockFoyer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Room> rooms = new LinkedHashSet<>();
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "foyer_id_foyer")
     private Foyer foyer;

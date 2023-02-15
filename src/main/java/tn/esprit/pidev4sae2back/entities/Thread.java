@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,10 +31,12 @@ public class Thread {
     private Timestamp date;
 
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id_user")
     private User user;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "forum_id_forum")
     private Forum forum;

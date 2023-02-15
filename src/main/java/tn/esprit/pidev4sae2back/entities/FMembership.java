@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,10 +32,12 @@ public class FMembership {
     private float price;
 
 
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "user_id_user")
     private User user;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id_room")
     private Room room;
