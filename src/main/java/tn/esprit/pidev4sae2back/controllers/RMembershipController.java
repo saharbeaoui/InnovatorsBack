@@ -1,13 +1,14 @@
 package tn.esprit.pidev4sae2back.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidev4sae2back.entities.RMembership;
 import tn.esprit.pidev4sae2back.services.RMembershipServiceI;
 
+import java.util.List;
+
 @RestController
+@RequestMapping("/RMembership")
 public class RMembershipController {
 
     @Autowired
@@ -15,9 +16,22 @@ public class RMembershipController {
 
 
     @PostMapping("/addRMembership")
-    public RMembership addRMembership(@RequestBody RMembership rMembership)
-    {
+    public RMembership addRMembership(@RequestBody RMembership rMembership) {
         return rmI.addRMembership(rMembership);
     }
 
+    @GetMapping("/retrieveAllRMemberships")
+    public List<RMembership> getAllRMemberships(){
+        return rmI.retrieveAllRMemberships();
+    }
+
+    @PutMapping("/updateRMembership")
+    public RMembership updateRMembership(@RequestBody RMembership rMembership){
+       return rmI.updateRMembership(rMembership);
+    }
+    @GetMapping("/retrieveRMembership/{idRMembership}")
+    @ResponseBody
+    public RMembership retrieveRMembership(@PathVariable Long idRMembership){
+        return rmI.retrieveRMembership(idRMembership);
+    }
 }
