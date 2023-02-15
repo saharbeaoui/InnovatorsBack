@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,11 +24,9 @@ public class Meal {
     @Column(name = "description")
     private String description; //Text
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "menu_id_menu")
     private Menu menu;
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
 }
