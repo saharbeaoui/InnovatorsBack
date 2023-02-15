@@ -17,4 +17,11 @@ public interface RMembershipServiceI {
     void removeRMembership(Long idRMembership);
 
     RMembership addRMembershipAndAssToUserAndRestau(RMembership rMembership, Long userId);
+
+
+    List<RMembership> listeRMembershipsGUESTS(Long idRestaurant);
+
+    List<RMembership> listeRMembershipsSTUDENTS(Long idRestaurant);
+
+    List<RMembership> listeRMembershipsTEACHERS(Long idRestaurant);
 }

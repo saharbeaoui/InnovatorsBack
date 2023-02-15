@@ -47,5 +47,19 @@ public class RMembershipController {
         return rmI.addRMembershipAndAssToUserAndRestau(rMembership,userId);
     }
 
+    @GetMapping("/listeRMembershipsGUESTS/{idRestau}")
+    public List<RMembership> listeRMembershipsGUESTS(@PathVariable Long idRestau){
+        return rmI.listeRMembershipsGUESTS(idRestau);
+    }
+
+    @GetMapping("/listeRMembershipsTEACHERS/{idRestau}")
+    public List<RMembership> listeRMembershipsTEACHERS(@PathVariable Long idRestau){
+        return rmI.listeRMembershipsTEACHERS(idRestau);
+    }
+
+    @GetMapping("/listeRMembershipsSTUDENTS/{idRestau}")
+    public List<RMembership> listeRMembershipsSTUDENTS(@PathVariable Long idRestau){
+        return rmI.listeRMembershipsSTUDENTS(idRestau);
+    }
 
 }
