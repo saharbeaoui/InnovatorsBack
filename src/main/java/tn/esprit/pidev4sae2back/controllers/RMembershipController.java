@@ -20,6 +20,12 @@ public class RMembershipController {
         return rmI.addRMembership(rMembership);
     }
 
+    @GetMapping("/retrieveRMembership/{idRMembership}")
+    @ResponseBody
+    public RMembership retrieveRMembership(@PathVariable Long idRMembership){
+        return rmI.retrieveRMembership(idRMembership);
+    }
+
     @GetMapping("/retrieveAllRMemberships")
     public List<RMembership> getAllRMemberships(){
         return rmI.retrieveAllRMemberships();
@@ -29,9 +35,17 @@ public class RMembershipController {
     public RMembership updateRMembership(@RequestBody RMembership rMembership){
        return rmI.updateRMembership(rMembership);
     }
-    @GetMapping("/retrieveRMembership/{idRMembership}")
-    @ResponseBody
-    public RMembership retrieveRMembership(@PathVariable Long idRMembership){
-        return rmI.retrieveRMembership(idRMembership);
+
+
+    @DeleteMapping("/removeRMembership/{idRMembership}")
+    public void removeEquipe(@PathVariable Long idRMembership) {
+        rmI.removeRMembership(idRMembership);
     }
+
+    @PostMapping("/addRMembershipAndAssToUserAndRestau/{userId}")
+    public RMembership addRMembershipAndAssToUserAndRestau(@RequestBody RMembership rMembership,@PathVariable Long userId) {
+        return rmI.addRMembershipAndAssToUserAndRestau(rMembership,userId);
+    }
+
+
 }

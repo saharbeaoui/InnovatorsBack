@@ -13,4 +13,8 @@ public interface RMembershipServiceI {
     RMembership updateRMembership(RMembership rMembership);
 
     RMembership retrieveRMembership(Long idRMembership);
+
+    void removeRMembership(Long idRMembership);
+
+    RMembership addRMembershipAndAssToUserAndRestau(RMembership rMembership, Long userId);
 }
