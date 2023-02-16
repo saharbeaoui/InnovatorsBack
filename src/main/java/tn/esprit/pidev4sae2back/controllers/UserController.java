@@ -1,12 +1,13 @@
 package tn.esprit.pidev4sae2back.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidev4sae2back.entities.User;
 import tn.esprit.pidev4sae2back.services.UserServiceI;
 import tn.esprit.pidev4sae2back.services.UserServiceImp;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -23,6 +24,24 @@ public class UserController {
         return us.addUser(user);
     }
 
+    @GetMapping("get-all-users")
+    @ResponseBody
+    @Transactional
+    public List<User> getAllUsers(){
+        return  us.getAllUsers();
+    }
+    @PostMapping("update-user")
+    @ResponseBody
+    public User UpdateEtudiant(@RequestBody User user){
+        return  us.update(user);
+    }
+
+    @DeleteMapping("delete-user/{id}")
+    @ResponseBody
+    public boolean DeleteEtudiant(@PathVariable("id") Long id){
+        us.delete(id);
+        return true;
+    }
 
 
 
