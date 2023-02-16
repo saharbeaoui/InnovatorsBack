@@ -34,6 +34,9 @@ public class Restaurant {
     @Column(name = "adress")
     private String adress;
 
+    @Column(name = "archived")
+    private boolean archived;
+
     @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RMembership> rMemberships = new LinkedHashSet<>();
@@ -45,5 +48,13 @@ public class Restaurant {
     @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Menu> menus = new LinkedHashSet<>();
+
+    public void archive() {
+        this.archived = true;
+    }
+
+    public void unarchive() {
+        this.archived = false;
+    }
 
 }
