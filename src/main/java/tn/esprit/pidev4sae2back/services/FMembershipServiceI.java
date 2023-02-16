@@ -1,4 +1,14 @@
 package tn.esprit.pidev4sae2back.services;
 
+import tn.esprit.pidev4sae2back.entities.FMembership;
+import tn.esprit.pidev4sae2back.entities.Foyer;
+
+import java.util.List;
+
 public interface FMembershipServiceI {
+    List<FMembership> retrieveAllFMembership();
+    FMembership addFMembership(FMembership fm);
+    FMembership updateFMembership (FMembership fm);
+    FMembership retrieveFMembership (Long idFMembership);
+    void deleteFMembership(Long idFMembership);
 }
