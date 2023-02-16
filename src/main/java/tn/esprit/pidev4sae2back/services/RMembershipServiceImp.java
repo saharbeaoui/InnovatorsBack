@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidev4sae2back.entities.RMembership;
 import tn.esprit.pidev4sae2back.entities.Restaurant;
+import tn.esprit.pidev4sae2back.entities.TypeUser;
 import tn.esprit.pidev4sae2back.entities.User;
 import tn.esprit.pidev4sae2back.repositories.RMembershipRepository;
 import tn.esprit.pidev4sae2back.repositories.RestaurantRepository;
@@ -57,6 +58,28 @@ public class RMembershipServiceImp implements RMembershipServiceI{
             rMembership.setUser(u);
         }else log.info("Restaurant n'existe pas");
         return rmr.save(rMembership);
+    }
+    @Override
+    public List<RMembership> listeRMembershipsGUESTS(Long idRestaurant) {
+        Restaurant r = rr.findById(idRestaurant).orElse(null);
+
+        List<RMembership> RMembershipsGUESTS = rmr.findAllByRestaurantAndUser_TypeUser(r, TypeUser.GUEST);
+        List<RMembership> RMembershipsTEACHERS = rmr.findAllByRestaurantAndUser_TypeUser(r, TypeUser.TEACHER);
+        return RMembershipsGUESTS;
+    }
+    @Override
+    public List<RMembership> listeRMembershipsSTUDENTS(Long idRestaurant) {
+        Restaurant r = rr.findById(idRestaurant).orElse(null);
+
+        List<RMembership> RMembershipsSTUDENTS = rmr.findAllByRestaurantAndUser_TypeUser(r, TypeUser.STUDENT);
+        return RMembershipsSTUDENTS;
+    }
+    @Override
+    public List<RMembership> listeRMembershipsTEACHERS(Long idRestaurant) {
+        Restaurant r = rr.findById(idRestaurant).orElse(null);
+
+        List<RMembership> RMembershipsTEACHERS = rmr.findAllByRestaurantAndUser_TypeUser(r, TypeUser.TEACHER);
+        return RMembershipsTEACHERS;
     }
 
 }
