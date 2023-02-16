@@ -1,16 +1,42 @@
 package tn.esprit.pidev4sae2back.controllers;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import tn.esprit.pidev4sae2back.entities.Foyer;
+import tn.esprit.pidev4sae2back.services.FoyerServiceI;
 
-public class FoyerController extends Application {
+import java.util.List;
 
-    public static void main(String[] args) {
-        launch(args);
+@RestController
+@RequestMapping("/foyer")
+public class FoyerController {
+    @Autowired
+    FoyerServiceI foyerServiceI;
+
+
+    @PostMapping("/addFoyer")
+    public Foyer addFoyer(@RequestBody Foyer foyer) {
+        return foyerServiceI.addFoyer(foyer);
     }
 
-    @Override
-    public void start(Stage primaryStage) {
+    @GetMapping("/getAllFoyers")
+    public List<Foyer> getAllFoyers(){
+        return foyerServiceI.getAllFoyers();
+    }
 
+    @GetMapping("/getFoyer/{idFoyer}")
+    @ResponseBody
+    public Foyer getFoyer(@PathVariable Long idFoyer){
+        return foyerServiceI.getFoyer(idFoyer);
+    }
+    @PutMapping("/updateFoyer")
+    public Foyer updateFoyer(@RequestBody Foyer foyer){
+        return foyerServiceI.updateFoyer(foyer);
+    }
+
+
+    @DeleteMapping("/removefoyer/{idFoyer}")
+    public void removeFoyer(@PathVariable Long idFoyer) {
+        foyerServiceI.removeFoyer(idFoyer);
     }
 }
