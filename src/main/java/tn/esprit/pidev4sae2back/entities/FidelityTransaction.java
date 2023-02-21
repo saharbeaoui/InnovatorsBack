@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class FidelityTransaction {
     @Column(name = "transaction_date")
     private LocalDateTime transactionDate;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fidelity_card_id")
     private FidelityCard fidelityCard;

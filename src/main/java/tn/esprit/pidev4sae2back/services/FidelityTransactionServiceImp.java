@@ -5,10 +5,13 @@ import org.springframework.stereotype.Service;
 import tn.esprit.pidev4sae2back.entities.FidelityCard;
 import tn.esprit.pidev4sae2back.entities.FidelityTransaction;
 import tn.esprit.pidev4sae2back.entities.TransactionType;
+import tn.esprit.pidev4sae2back.entities.User;
 import tn.esprit.pidev4sae2back.repositories.FidelityCardRepository;
 import tn.esprit.pidev4sae2back.repositories.FidelityTransactionRepository;
+import tn.esprit.pidev4sae2back.repositories.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class FidelityTransactionServiceImp implements FidelityTransactionServiceI{
@@ -18,6 +21,11 @@ public class FidelityTransactionServiceImp implements FidelityTransactionService
 
     @Autowired
     FidelityCardRepository fcr;
+
+    @Autowired
+    UserRepository ur;
+
+
 
     @Override
     public FidelityTransaction addTransaction(FidelityTransaction transaction) {
@@ -39,6 +47,12 @@ public class FidelityTransactionServiceImp implements FidelityTransactionService
         } else {
             throw new IllegalArgumentException("Invalid fidelity card");
         }
+    }
+
+    @Override
+    public List<FidelityTransaction> showTransactionByUser(Long userId){
+        User u = ur.findById(userId).orElse(null);
+        return u.getFidelityCard().getTransactions();
     }
 
 }

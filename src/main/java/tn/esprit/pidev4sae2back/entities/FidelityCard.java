@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,11 +26,11 @@ public class FidelityCard {
     private Long idFidelityCard;
 
     @Column(name = "card_number", nullable = false)
-    private String cardNumber;
+    private Long cardNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type_membership")
-    private TypeMembership typeMembership;
+    @Column(name = "membership_Level")
+    private MembershipLevel membershipLevel;
 
     @Column(name = "total_points", nullable = false)
     private int totalPoints;
@@ -37,13 +38,16 @@ public class FidelityCard {
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "fidelityCard")
     private List<FidelityTransaction> transactions;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "fidelityCard", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reward> rewards = new LinkedHashSet<>();
 
