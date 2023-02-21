@@ -18,9 +18,9 @@ public interface FidelityCardServiceI {
 
     void removeFidelityCard(Long idFidelityCard);
 
-    FidelityCard updateMemberShipLevelFidelityCard(FidelityCard fidelityCard);
+    FidelityCard updateMemberShipLevelFidelityCard(Long fidelityCardId);
 
-    MembershipLevel getMembershipLevel(FidelityCard fd);
+    MembershipLevel getMembershipLevel(Long fidelityCardId);
 
     MembershipLevel getMembershipLevelByUser(Long userId);
 

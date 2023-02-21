@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidev4sae2back.entities.*;
@@ -8,6 +9,7 @@ import tn.esprit.pidev4sae2back.repositories.UserRepository;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class FidelityCardServiceImp implements FidelityCardServiceI {
 
@@ -22,16 +24,23 @@ public class FidelityCardServiceImp implements FidelityCardServiceI {
     @Override
     public FidelityCard addFidelityCard(FidelityCard fidelityCard) {
         fidelityCard.setTotalPoints(0);
+        fidelityCard.setMembershipLevel(MembershipLevel.NONE);
         return fcr.save(fidelityCard);
     }
 
     @Override
     public FidelityCard addFidelityCardAndAssToUser(FidelityCard fidelityCard, Long userId){
+        fidelityCard.setTotalPoints(0);
+        fidelityCard.setMembershipLevel(MembershipLevel.NONE);
         User u = ur.findById(userId).orElse(null);
-        u.setFidelityCard(fidelityCard);
-        ur.save(u);
-        fidelityCard.setUser(u);
-        return fcr.save(fidelityCard);
+
+        if (u.getFidelityCard()==null) {
+            fidelityCard.setUser(u);
+            return fcr.save(fidelityCard);
+        } else
+            log.info("User have already a Fidelity Card !!");
+        return null;
+
     }
 
     @Override
@@ -46,6 +55,8 @@ public class FidelityCardServiceImp implements FidelityCardServiceI {
 
     @Override
     public FidelityCard updateFidelityCard(FidelityCard fidelityCard) {
+           //User u = fidelityCard.getUser();
+           //fidelityCard.setUser(u);
         return fcr.save(fidelityCard);
     }
 
@@ -55,12 +66,13 @@ public class FidelityCardServiceImp implements FidelityCardServiceI {
     }
 
     @Override
-    public MembershipLevel getMembershipLevel(FidelityCard fd) {
-        if (fd.getTotalPoints() >= 1000) {
+    public MembershipLevel getMembershipLevel(Long fidelityCardId) {
+        FidelityCard f = fcr.findById(fidelityCardId).orElse(null);
+        if (f.getTotalPoints() >= 1000) {
             return MembershipLevel.GOLD;
-        } else if (fd.getTotalPoints() >= 500) {
+        } else if (f.getTotalPoints() >= 500) {
             return MembershipLevel.SILVER;
-        } else if (fd.getTotalPoints() >= 300) {
+        } else if (f.getTotalPoints() >= 300) {
             return MembershipLevel.BRONZE;
         } else {
             return MembershipLevel.NONE;
@@ -82,9 +94,10 @@ public class FidelityCardServiceImp implements FidelityCardServiceI {
     }
 
     @Override
-    public FidelityCard updateMemberShipLevelFidelityCard(FidelityCard fidelityCard){
-        fidelityCard.setMembershipLevel(getMembershipLevel(fidelityCard));
-        return fcr.save(fidelityCard);
+    public FidelityCard updateMemberShipLevelFidelityCard(Long fidelityCardId){
+        FidelityCard f = fcr.findById(fidelityCardId).orElse(null);
+        f.setMembershipLevel(getMembershipLevel(fidelityCardId));
+        return fcr.save(f);
     }
 
     @Override

@@ -28,8 +28,8 @@ public class FidelityTransactionServiceImp implements FidelityTransactionService
 
 
     @Override
-    public FidelityTransaction addTransaction(FidelityTransaction transaction) {
-        FidelityCard card = fcr.findById(transaction.getFidelityCard().getIdFidelityCard()).orElse(null);
+    public FidelityTransaction addTransaction(FidelityTransaction transaction, Long FdId) {
+        FidelityCard card = fcr.findById(FdId).orElse(null);
         if (card != null) {
             if (transaction.getTransactionType() == TransactionType.EARN_POINTS) {
                 card.setTotalPoints(card.getTotalPoints() + transaction.getPoints());
@@ -41,6 +41,7 @@ public class FidelityTransactionServiceImp implements FidelityTransactionService
                     card.setTotalPoints(newPoints);
                 }
             }
+            transaction.setFidelityCard(card);
             fcr.save(card);
             transaction.setTransactionDate(LocalDateTime.now());
             return ftr.save(transaction);
@@ -53,6 +54,12 @@ public class FidelityTransactionServiceImp implements FidelityTransactionService
     public List<FidelityTransaction> showTransactionByUser(Long userId){
         User u = ur.findById(userId).orElse(null);
         return u.getFidelityCard().getTransactions();
+    }
+
+    @Override
+    public List<FidelityTransaction> showTransactionByFidelityCard(Long fidelityCardId){
+        FidelityCard fd = fcr.findById(fidelityCardId).orElse(null);
+        return fd.getTransactions();
     }
 
 }
