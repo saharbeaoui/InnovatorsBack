@@ -40,6 +40,7 @@ public class UserController {
     @ResponseBody
     public boolean DeleteEtudiant(@PathVariable("id") Long id){
         us.delete(id);
+
         return true;
     }
 
