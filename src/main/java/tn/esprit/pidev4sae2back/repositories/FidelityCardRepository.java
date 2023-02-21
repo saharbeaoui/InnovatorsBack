@@ -6,4 +6,5 @@ import tn.esprit.pidev4sae2back.entities.FidelityCard;
 
 @Repository
 public interface FidelityCardRepository extends JpaRepository<FidelityCard, Long> {
+
 }

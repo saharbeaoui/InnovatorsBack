@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,11 +27,12 @@ public class Reward {
     private String description;
 
     @Column(name = "point_value", nullable = false)
-    private int pointValue; //ken wsselelha yyerbah el 3assba
+    private int pointValue;
 
     @Column(name = "quantity_available", nullable = false)
     private int quantityAvailable;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fidelity_card_id")
     private FidelityCard fidelityCard;
