@@ -26,4 +26,5 @@ public interface RMembershipServiceI {
     long nbRMembershipValidesBETWEEN(LocalDateTime startDate, LocalDateTime endDate);
 
 
+    List<RMembership> findAllByUser(Long idUser);
 }

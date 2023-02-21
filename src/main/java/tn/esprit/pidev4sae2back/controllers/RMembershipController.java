@@ -108,6 +108,10 @@ public class RMembershipController {
         log.info(startDate+"   "+endDate);
         return rmI.RMembershipValidesBETWEEN(startDate,endDate);
     }
-
+    @GetMapping("/findAllByUser/{idUser}")
+    @ResponseBody
+    public List<RMembership> findAllByUser(@PathVariable Long idUser){
+        return rmI.findAllByUser(idUser);
+    }
 
 }

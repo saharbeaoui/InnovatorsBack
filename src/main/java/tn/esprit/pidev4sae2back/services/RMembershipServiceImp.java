@@ -169,4 +169,9 @@ public class RMembershipServiceImp implements RMembershipServiceI{
         }
     }
 
+    @Override
+    public List<RMembership> findAllByUser(Long idUser) {
+       return rmr.findAllByUserIdUser(idUser);
+    }
+
 }
