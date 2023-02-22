@@ -41,4 +41,11 @@ public class MenuRestcontroller {
     public void removemenu(@PathParam("menu-id")Long idMenu){
        menuServiceI.removeMenu(idMenu);
     }
+
+    @PutMapping("/assignMenutoRestaurant/{id-menu}/{id-restau}")
+    @ResponseBody
+    public void assignMenutoRestaurant(@PathVariable("id-menu") Long idMenu,@PathVariable("id-restau") Long idRestau ){
+        menuServiceI.assignMenutoRestaurant(idMenu,idRestau);
+
+    }
 }

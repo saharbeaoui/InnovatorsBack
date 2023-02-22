@@ -16,4 +16,7 @@ public interface BlockRestauServiceI {
     void archiveBlock(Long idBlock);
 
     void unarchiveBlock(Long idBlock);
+
+    public void assignBlockRtoRestaurant (Long idBlock, Long
+            idRestau) ;
 }

@@ -3,7 +3,9 @@ package tn.esprit.pidev4sae2back.services;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidev4sae2back.entities.Menu;
+import tn.esprit.pidev4sae2back.entities.Restaurant;
 import tn.esprit.pidev4sae2back.repositories.MenuRepository;
+import tn.esprit.pidev4sae2back.repositories.RestaurantRepository;
 
 import java.util.List;
 
@@ -11,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MenuServiceImp implements MenuServiceI{
     MenuRepository menuRepository;
+    RestaurantRepository restaurantRepository;
 
 
     @Override
@@ -36,6 +39,18 @@ public class MenuServiceImp implements MenuServiceI{
     @Override
     public void removeMenu(Long idMenu) {
         menuRepository.deleteById(idMenu);
+
+    }
+
+    @Override
+    public void assignMenutoRestaurant(Long idMenu, Long idRestau) {
+        Menu menu = menuRepository.findById(idMenu).orElse(null);
+        Restaurant restaurant = restaurantRepository.findById(idRestau).orElse(null);
+        menu.setRestaurant(restaurant);
+        restaurant.getMenus().add(menu);
+        restaurantRepository.save(restaurant);
+        menuRepository.save(menu);
+
 
     }
 }

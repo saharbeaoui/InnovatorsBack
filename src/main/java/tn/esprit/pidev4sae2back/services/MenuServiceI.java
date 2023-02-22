@@ -14,4 +14,6 @@ public interface MenuServiceI {
     Menu retrieveMenu(Long idMenu);
 
     void removeMenu(Long idMenu);
+    public void assignMenutoRestaurant (Long idMenu, Long
+            idRestau) ;
 }

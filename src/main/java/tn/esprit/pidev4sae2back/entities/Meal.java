@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 @Table(name = "meal")
 public class Meal {
@@ -25,8 +27,16 @@ public class Meal {
     private String description; //Text
 
     @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "nutrition_information_id_nut")
+    private NutritionInformation nutritionInformation;
+
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "menu_id_menu")
     private Menu menu;
+
+
+
 
 }
