@@ -12,6 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 public class ForumServiceImp implements ForumServiceI{
     ForumRepository forumRepository;
+
+    public List<Forum> searchForums(String query) {
+        return forumRepository.findByTitleContainingIgnoreCaseOrTopicContainingIgnoreCaseOrderByTitleAsc(query, query);
+    }
     @Override
     public List<Forum> retrieveAllForums() {
         return forumRepository.findAll() ;

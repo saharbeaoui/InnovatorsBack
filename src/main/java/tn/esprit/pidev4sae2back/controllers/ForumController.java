@@ -14,6 +14,11 @@ import java.util.List;
 public class ForumController {
     ForumServiceImp forumServiceImp;
 
+    @GetMapping("/search")
+    public List<Forum> searchForums(@RequestParam("query") String query) {
+        return forumServiceImp.searchForums(query);
+    }
+
     //http://localhost:8082/test/forum/retrieveAllForums
     @GetMapping("/retrieveAllForums")
     public List<Forum> retrieveAllForum() {
