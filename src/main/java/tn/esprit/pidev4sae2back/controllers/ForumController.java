@@ -3,6 +3,8 @@ package tn.esprit.pidev4sae2back.controllers;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidev4sae2back.entities.Forum;
+import tn.esprit.pidev4sae2back.entities.ForumStatisticsDTO;
+import tn.esprit.pidev4sae2back.entities.Thread;
 import tn.esprit.pidev4sae2back.repositories.ForumRepository;
 import tn.esprit.pidev4sae2back.services.ForumServiceImp;
 
@@ -20,7 +22,7 @@ public class ForumController {
 
     private boolean containsForbiddenWords(String input) {
         // Vérifier si la chaîne d'entrée contient des mots interdits
-        List<String> forbiddenWords = Arrays.asList("fuck", "fuck you", "fml");
+        List<String> forbiddenWords = Arrays.asList("fuck", "fuck you", "fml","asba");
         for (String word : forbiddenWords) {
             if (input.toLowerCase().contains(word.toLowerCase())) {
                 return true;
@@ -76,4 +78,13 @@ public class ForumController {
         forumServiceImp.deleteForum(idForum);
 
     }
+    @GetMapping("/forum/statistics")
+    public ForumStatisticsDTO getForumStatistics() {
+        return forumServiceImp.getForumStatistics();
+    }
+    @PostMapping("/{forumId}/threads")
+    public Thread addThreadToForum(@PathVariable Long forumId, @RequestBody Thread threadRequest) {
+        return forumServiceImp.addThreadToForum(forumId, threadRequest.getTitle(), threadRequest.getDescription());
+    }
+
 }

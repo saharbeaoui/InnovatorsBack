@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface ForumRepository extends JpaRepository<Forum, Long> {
     public List<Forum> findByTitleContainingIgnoreCaseOrTopicContainingIgnoreCaseOrderByTitleAsc(String title, String topic);
+    long count();
 }

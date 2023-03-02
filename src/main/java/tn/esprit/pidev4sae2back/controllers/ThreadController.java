@@ -65,7 +65,7 @@ public class ThreadController {
         return threadServiceImp.retrieveThread(idThread) ;
     }
     //http://localhost:8082/test/thread/deleteThread/{Thread}
-    @DeleteMapping("/deleteThread/{Thread}")
+    @DeleteMapping("/deleteThread/{idThread}")
     public void deleteThread(@PathVariable("idThread")Long idThread){
         threadServiceImp.deleteThread(idThread);
     }
