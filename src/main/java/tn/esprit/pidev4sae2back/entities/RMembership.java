@@ -45,6 +45,12 @@ public class RMembership {
     @Column(name = "validated")
     private Boolean validated;
 
+    @Column(name = "has_renewed", nullable = false)
+    private boolean hasRenewed;
+
+    @Column(name = "renewal_count", nullable = false)
+    private int renewalCount;
+
     public void validate() {
         this.validated = true;
     }

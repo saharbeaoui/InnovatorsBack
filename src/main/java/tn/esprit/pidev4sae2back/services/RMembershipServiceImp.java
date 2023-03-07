@@ -5,15 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidev4sae2back.entities.*;
-import tn.esprit.pidev4sae2back.repositories.RMembershipRepository;
-import tn.esprit.pidev4sae2back.repositories.RestaurantRepository;
-import tn.esprit.pidev4sae2back.repositories.UserRepository;
+import tn.esprit.pidev4sae2back.repositories.*;
 import tn.esprit.pidev4sae2back.utils.MailService;
 
 import javax.mail.MessagingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
+
+import static tn.esprit.pidev4sae2back.entities.TypeUser.STUDENT;
+import static tn.esprit.pidev4sae2back.entities.TypeUser.GUEST;
+import static tn.esprit.pidev4sae2back.entities.TypeUser.TEACHER;
 
 @Slf4j
 @Service
@@ -26,6 +28,16 @@ public class RMembershipServiceImp implements RMembershipServiceI{
 
     @Autowired
     UserRepository ur;
+
+    @Autowired
+    BillingRepository br;
+
+    @Autowired
+    FidelityCardServiceI fidelityCardServiceI;
+
+    @Autowired
+    RUserTransactionRepository utr;
+
 
     @Autowired
     private MailService ms;
@@ -67,8 +79,18 @@ public class RMembershipServiceImp implements RMembershipServiceI{
                 return null;
             }
         }
+        Restaurant r = rr.findAll().get(0);
+        rMembership.setRestaurant(r);
         rMembership.setUser(u);
+        rMembership.setValidated(false);
+        rMembership.setHasRenewed(false);
+        rMembership.setPrice(br.getTotalCostWhere(rMembership.getTypeMembership(),rMembership.getDuration(),u.getTypeUser()));
         rmr.save(rMembership);
+        RUserTransaction rUserTransaction = new RUserTransaction();
+        rUserTransaction.setTransactionDate(rMembership.getStartDate());
+        rUserTransaction.setTransactionAmount(rMembership.getPrice());
+        rUserTransaction.setUserId(idStudent);
+        utr.save(rUserTransaction);
         return rMembership;
     }
 
@@ -133,7 +155,7 @@ public class RMembershipServiceImp implements RMembershipServiceI{
     public List<RMembership> listeRMembershipsSTUDENTS(Long idRestaurant) {
         Restaurant r = rr.findById(idRestaurant).orElse(null);
 
-        List<RMembership> RMembershipsSTUDENTS = rmr.findAllByRestaurantAndUser_TypeUser(r, TypeUser.STUDENT);
+        List<RMembership> RMembershipsSTUDENTS = rmr.findAllByRestaurantAndUser_TypeUser(r, STUDENT);
         return RMembershipsSTUDENTS;
     }
     @Override
@@ -154,9 +176,7 @@ public class RMembershipServiceImp implements RMembershipServiceI{
     @Override
     public long nbRMembershipValidesBETWEEN(LocalDateTime startDate, LocalDateTime endDate) {
 
-        List<RMembership> listRMembership = rmr.findRMembershipBetweenTwoDates(startDate,endDate);
-
-        return listRMembership.stream().filter(c-> !c.getValidated()).count();
+       return rmr.findRMembershipBetweenTwoDates(startDate,endDate).size();
     }
 
     @Scheduled(fixedRate = 30000)
@@ -173,5 +193,174 @@ public class RMembershipServiceImp implements RMembershipServiceI{
     public List<RMembership> findAllByUser(Long idUser) {
        return rmr.findAllByUserIdUser(idUser);
     }
+
+    @Override
+    public RMembership getLastMembership(User user) {
+        Set<RMembership> memberships = user.getRMembership();
+        if (memberships == null || memberships.isEmpty()) {
+            log.info("User have no Membership");
+            return null;
+        }
+        List<RMembership> membershipList = new ArrayList<>(memberships);
+        Collections.sort(membershipList, Comparator.comparing(RMembership::getStartDate).reversed());
+        return membershipList.get(0);
+    }
+
+
+    @Override
+    public RMembership renewMembership(Long membershipId, Duration duration, TypeMembership typeMembership) {
+        RMembership rMembership = rmr.findById(membershipId).orElse(null);
+
+        LocalDateTime today = LocalDateTime.now();
+
+        if (rMembership.getEndDate().isBefore(today)) {
+            throw new IllegalStateException("Cannot renew an expired membership");
+        }
+
+
+        rMembership.setTypeMembership(typeMembership);
+        rMembership.setDuration(duration);
+        rMembership.setStartDate(today);
+        if (duration == Duration.DAY) {
+            rMembership.setEndDate(today.plusDays(1));
+        }
+        if (duration == Duration.MONTH) {
+            rMembership.setEndDate(today.plusMonths(1));
+        }
+        if (duration == Duration.SEMESTER) {
+            rMembership.setEndDate(today.plusMonths(6));
+        }
+        if (duration == Duration.YEAR) {
+            rMembership.setEndDate(today.plusYears(1));
+        }
+
+            rMembership.setValidated(true);
+            rMembership.setPrice(br.getTotalCostWhere(typeMembership, duration, rMembership.getUser().getTypeUser()));
+
+            rMembership.setRenewalCount(rMembership.getRenewalCount() + 1);
+            rMembership.setHasRenewed(true);
+
+        rmr.save(rMembership);
+
+        RUserTransaction rUserTransaction = new RUserTransaction();
+        rUserTransaction.setTransactionDate(rMembership.getStartDate());
+        rUserTransaction.setTransactionAmount(rMembership.getPrice());
+        rUserTransaction.setUserId(rMembership.getUser().getIdUser());
+        utr.save(rUserTransaction);
+
+
+            return rMembership;
+        }
+
+
+
+    @Override
+    public double calculateRenewalRate(LocalDateTime startDate, LocalDateTime endDate) {
+        List<RMembership> rMembershipList = rmr.findRMembershipBetweenTwoDates(startDate, endDate);
+        int totalRenewed = 0;
+        int totalMemberships = rMembershipList.size();
+
+        for (RMembership rMembership : rMembershipList) {
+            if (rMembership.isHasRenewed()) {
+                totalRenewed=totalRenewed+rMembership.getRenewalCount(); //totalRenewed++
+                if (rMembership.getRenewalCount() > 5) {
+                    double discountPercentage = 10.0; // 10% discount
+                    double discountedPrice = rMembership.getPrice() * (1 - discountPercentage / 100.0);
+                   rMembership.setPrice((float) discountedPrice);
+                   rmr.save(rMembership);
+                } else {
+                    log.info("Reduction for the Membership of :" + rMembership.getUser().getLastName() + rMembership.getUser().getFirstName());
+                }
+            }
+        }
+
+        if (totalMemberships == 0) {
+            return 0.0;
+        } else {
+            return (double) totalRenewed / totalMemberships * 100.0;
+        }
+    }
+
+
+    @Override
+    public Map<Long, Double> getRevenuePerUSER() {
+        List<RUserTransaction> transactions = utr.findAll();
+        Map<Long, Double> revenuePerUSER = new HashMap<>();
+
+        for (RUserTransaction transaction : transactions) {
+            Long userId = transaction.getUserId();
+            double transactionAmount = transaction.getTransactionAmount();
+            if (revenuePerUSER.containsKey(userId)) {
+                revenuePerUSER.put(userId, revenuePerUSER.get(userId) + transactionAmount);
+            } else {
+                revenuePerUSER.put(userId, transactionAmount);
+            }
+        }
+        return revenuePerUSER;
+    }
+
+    @Override
+    public Map<TypeUser, Double> getRevenuePerROLE() {
+        List<User> studentList = ur.getAllByTypeUser(STUDENT);
+        List<User> teacherList = ur.getAllByTypeUser(TEACHER);
+        List<User> guesttList = ur.getAllByTypeUser(GUEST);
+        Map<TypeUser, Double> revenuePerRole = new HashMap<>();
+        List<RUserTransaction> transactionsFirst = utr.findAll();
+
+        Double vide = 0.0;
+
+        for (RUserTransaction transaction : transactionsFirst) {
+            for (User user : studentList) {
+                    if (user.getIdUser().equals(transaction.getUserId())) {
+                        double transactionAmount = transaction.getTransactionAmount();
+                        log.info("" + transactionAmount);
+                        if (revenuePerRole.containsKey(STUDENT)) {
+                            revenuePerRole.put(STUDENT, revenuePerRole.get(STUDENT) + transactionAmount);
+                        }else revenuePerRole.put(STUDENT, transactionAmount);
+                    }
+            }
+
+            for (User user : teacherList) {
+                if (user.getIdUser().equals(transaction.getUserId())) {
+                    double transactionAmount = transaction.getTransactionAmount();
+                    log.info("" + transactionAmount);
+                    if (revenuePerRole.containsKey(TEACHER)) {
+                        revenuePerRole.put(TEACHER, revenuePerRole.get(TEACHER) + transactionAmount);
+                    }else revenuePerRole.put(TEACHER, transactionAmount);
+                }
+            }
+
+
+            for (User user : guesttList) {
+                if (user.getIdUser().equals(transaction.getUserId())) {
+                    double transactionAmount = transaction.getTransactionAmount();
+                    log.info("" + transactionAmount);
+                    if (revenuePerRole.containsKey(GUEST)) {
+                        revenuePerRole.put(GUEST, revenuePerRole.get(GUEST) + transactionAmount);
+                    }else revenuePerRole.put(GUEST, transactionAmount);
+                }
+            }
+        }
+
+        if (guesttList.isEmpty()){
+            revenuePerRole.put(GUEST,vide);
+        }
+
+
+        return revenuePerRole;
+    }
+
+    @Override
+    public Double getRevenueTOTAL() {
+        List<RUserTransaction> transactions = utr.findAll();
+          Double total = null;
+        for (RUserTransaction transaction : transactions) {
+            double transactionAmount = transaction.getTransactionAmount();
+          total=transactionAmount+transactionAmount;
+
+        }
+        return total;
+    }
+
 
 }

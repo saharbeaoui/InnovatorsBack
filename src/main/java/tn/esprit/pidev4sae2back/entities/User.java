@@ -81,7 +81,7 @@ public class User {
     private Set<Claim> claimResponse = new LinkedHashSet<>();
 
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
     private FidelityCard fidelityCard;
 
 }

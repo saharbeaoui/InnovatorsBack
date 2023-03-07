@@ -21,9 +21,10 @@ public interface RMembershipRepository extends JpaRepository<RMembership, Long> 
 
     public List<RMembership> findByValidatedIsTrueAndStartDateAfterAndEndDateBefore(LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query("select m from RMembership m where   m.startDate>=?1 and m.endDate<=?2")
+    @Query("select m from RMembership m where   m.startDate>=?1 and m.endDate<=?2 and m.validated=true ")
     public List<RMembership> findRMembershipBetweenTwoDates(LocalDateTime startDate, LocalDateTime endDate);
 
+    public List<RMembership> findAllByStartDateBetween(LocalDateTime startDate, LocalDateTime endDate);
     public List<RMembership> findByUser(User u);
 
     public List<RMembership> findAllByUserIdUser(Long idUser);

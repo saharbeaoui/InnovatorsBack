@@ -4,14 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.pidev4sae2back.entities.RMembership;
+import tn.esprit.pidev4sae2back.entities.*;
+import tn.esprit.pidev4sae2back.repositories.RestaurantRepository;
 import tn.esprit.pidev4sae2back.services.RMembershipServiceI;
 
 import javax.mail.MessagingException;
 import javax.websocket.server.PathParam;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -20,6 +23,9 @@ public class RMembershipController {
 
     @Autowired
     RMembershipServiceI rmI;
+
+    @Autowired
+    RestaurantRepository rr;
 
 
     @PostMapping("/addRMembership")
@@ -114,4 +120,54 @@ public class RMembershipController {
         return rmI.findAllByUser(idUser);
     }
 
+
+
+
+    @PutMapping("/renewMembership/{membershipId}/{duration}/{typeMembership}")
+    public RMembership renewMembership(@PathVariable("membershipId") Long membershipId ,@PathVariable("duration") Duration duration,@PathVariable("typeMembership") TypeMembership typeMembership) {
+        return rmI.renewMembership(membershipId, duration, typeMembership);
+    }
+
+    @GetMapping("/getRenewalRate/{startDate}/{endDate}")
+    public Map<String, Double> getRenewalRate(
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startDate,
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endDate) {
+
+        double renewalRate = rmI.calculateRenewalRate(startDate, endDate);
+
+        Map<String, Double> response = new HashMap<>();
+        response.put("renewalRate", renewalRate);
+
+        return response;
+    }
+
+    @GetMapping("/statsAboutUsersMemberships")
+    public Map<String, Double> statsAboutUsersMemberships() {
+        Restaurant restaurant= rr.findAll().get(0);
+        int nbRMembershipsSTUDENTS = rmI.listeRMembershipsSTUDENTS(restaurant.getIdRestau()).size();
+        int nbRMembershipsGUESTS = rmI.listeRMembershipsGUESTS(restaurant.getIdRestau()).size();
+        int nbRMembershipsTEACHERS = rmI.listeRMembershipsTEACHERS(restaurant.getIdRestau()).size();
+        Map<String, Double> response = new HashMap<>();
+        response.put("STUDENTS", (double) nbRMembershipsSTUDENTS);
+        response.put("GUESTS", (double) nbRMembershipsGUESTS);
+        response.put("TEACHERS", (double) nbRMembershipsTEACHERS);
+
+        return response;
+    }
+
+
+    @GetMapping("/getRevenuePerUSER")
+    public Map<Long, Double> getRevenuePerUSER() {
+        return rmI.getRevenuePerUSER();
+    }
+
+    @GetMapping("/getRevenuePerROLE")
+    public Map<TypeUser, Double> getRevenuePerROLE() {
+        return rmI.getRevenuePerROLE();
+    }
+
+    @GetMapping("/getRevenueTOTAL")
+    public Double getRevenueTOTAL() {
+        return rmI.getRevenueTOTAL();
+    }
 }

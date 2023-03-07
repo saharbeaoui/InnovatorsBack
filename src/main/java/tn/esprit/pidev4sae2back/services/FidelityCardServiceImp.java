@@ -54,9 +54,9 @@ public class FidelityCardServiceImp implements FidelityCardServiceI {
     }
 
     @Override
-    public FidelityCard updateFidelityCard(FidelityCard fidelityCard) {
-           //User u = fidelityCard.getUser();
-           //fidelityCard.setUser(u);
+    public FidelityCard updateFidelityCard(FidelityCard fidelityCard,Long userId) {
+           User u = ur.findById(userId).orElse(null);
+           fidelityCard.setUser(u);
         return fcr.save(fidelityCard);
     }
 

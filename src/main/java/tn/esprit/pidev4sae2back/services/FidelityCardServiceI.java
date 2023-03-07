@@ -14,7 +14,7 @@ public interface FidelityCardServiceI {
 
     List<FidelityCard> retrieveAllFidelityCard();
 
-    FidelityCard updateFidelityCard(FidelityCard fidelityCard);
+    FidelityCard updateFidelityCard(FidelityCard fidelityCard,Long userId);
 
     void removeFidelityCard(Long idFidelityCard);
 

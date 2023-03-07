@@ -33,9 +33,9 @@ public class FidelityCardController {
         return fcsI.retrieveAllFidelityCard();
     }
 
-    @PutMapping("/updateFidelityCard")
-    public FidelityCard updateFidelityCard(@RequestBody FidelityCard fidelityCard) {
-        return fcsI.updateFidelityCard(fidelityCard);
+    @PutMapping("/updateFidelityCard/{userId}")
+    public FidelityCard updateFidelityCard(@RequestBody FidelityCard fidelityCard,@PathVariable Long userId) {
+        return fcsI.updateFidelityCard(fidelityCard,userId);
     }
 
     @DeleteMapping("/removeFidelityCard/{idFidelityCard}")
