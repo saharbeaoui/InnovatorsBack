@@ -8,7 +8,9 @@ public interface FMembershipServiceI {
     List<FMembership> retrieveAllFMembership();
 
 
+
     FMembership addFMembership(FMembership fm, Long idUser, Long idFoyer);
+
 
     FMembership updateFMembership(FMembership fm);
 
@@ -19,4 +21,5 @@ public interface FMembershipServiceI {
     void freeBedAndRoomAfterMembershipEnds(Long idFMembership);
 
     FMembership F_MEMBERSHIPStatistics(Long idFMembership);
+
 }

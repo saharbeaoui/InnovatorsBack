@@ -10,11 +10,13 @@ import tn.esprit.pidev4sae2back.repositories.FoyerRepository;
 import tn.esprit.pidev4sae2back.repositories.RoomRepository;
 import tn.esprit.pidev4sae2back.repositories.UserRepository;
 
+
 import java.util.List;
 import java.util.Set;
 
 @Slf4j
 @Service
+
 @AllArgsConstructor
 public class FMembershipServiceImp implements FMembershipServiceI {
     @Autowired
@@ -25,12 +27,14 @@ public class FMembershipServiceImp implements FMembershipServiceI {
     FoyerServiceI foyerServiceI;
     WaitingListServiceI waitingListServiceI;
 
+
     @Override
     public List<FMembership> retrieveAllFMembership() {
         return fMembershipRepository.findAll();
     }
 
     @Override
+
     public FMembership addFMembership(FMembership fm, Long idUser, Long idFoyer) {
         FNameBlock fNameBlock = null;
         Foyer foyer = fr.findById(idFoyer).orElse(null);
@@ -190,6 +194,10 @@ public class FMembershipServiceImp implements FMembershipServiceI {
             }
 
         }return fm;
+
+    public FMembership addFMembership(FMembership fm) {
+        return fMembershipRepository.save(fm);
+
     }
 
     @Override
@@ -204,6 +212,7 @@ public class FMembershipServiceImp implements FMembershipServiceI {
 
     @Override
     public void deleteFMembership(Long idFMembership) {
+
         FMembership membership = fMembershipRepository.findById(idFMembership).orElse(null);
         assert membership != null;
         membership.setHobbie1(null);

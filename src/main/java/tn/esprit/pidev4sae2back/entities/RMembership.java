@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,8 +27,13 @@ public class RMembership {
     @Column(name = "type_membership")
     private TypeMembership typeMembership;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     @Column(name = "start_date")
-    private Timestamp startDate;
+    private LocalDateTime startDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "duration")
@@ -34,6 +41,23 @@ public class RMembership {
 
     @Column(name = "price", nullable = false)
     private float price;
+
+    @Column(name = "validated")
+    private Boolean validated;
+
+    @Column(name = "has_renewed", nullable = false)
+    private boolean hasRenewed;
+
+    @Column(name = "renewal_count", nullable = false)
+    private int renewalCount;
+
+    public void validate() {
+        this.validated = true;
+    }
+
+    public void unvalidate() {
+        this.validated = false;
+    }
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.ALL})

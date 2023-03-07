@@ -15,6 +15,7 @@ public class RoomController {
     @Autowired
     RoomServiceImp roomServiceImp;
 
+
     //http://localhost:8082/test/room/retrieveAllRooms
     @GetMapping("/retrieveAllRooms")
     public List<Room> retrieveAllRooms() {

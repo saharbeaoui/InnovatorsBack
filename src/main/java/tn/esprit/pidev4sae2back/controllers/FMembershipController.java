@@ -9,6 +9,7 @@ import tn.esprit.pidev4sae2back.services.FMembershipServiceImp;
 import tn.esprit.pidev4sae2back.services.RoomServiceI;
 import tn.esprit.pidev4sae2back.services.RoomServiceImp;
 
+
 import java.util.List;
 
 @RestController
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/fMembership")
 public class FMembershipController {
     @Autowired
+
     FMembershipServiceI fMembershipServiceI;
     RoomServiceI roomServiceI;
 
@@ -31,10 +33,6 @@ public class FMembershipController {
 
         return fmr ;}
 
-   // @PostMapping("/addFMembership/{idUser}")
-    //public FMembership addFMembership (@RequestBody FMembership fm,@PathVariable ("idUser") Long idUser) {return fMembershipServiceImp.addFMembership(fm,idUser);}
-    //@PostMapping("/addFMembership")
-    //public FMembership addFMembership (@RequestBody FMembership fm) {return fMembershipServiceImp.addFMembership(fm, 0L);}
 
     @PutMapping("/updateFMembership")
     public FMembership updateFMembership(@RequestBody FMembership fm) {return fMembershipServiceI.updateFMembership(fm);

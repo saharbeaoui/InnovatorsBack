@@ -10,10 +10,11 @@ import tn.esprit.pidev4sae2back.repositories.RoomRepository;
 import java.util.List;
 import java.util.Set;
 
-@Service
 
+@Service
 @AllArgsConstructor
 public class RoomServiceImp implements RoomServiceI{
+
 
     FMembershipRepository fMembershipRepository;
     RoomRepository roomRepository;
@@ -42,6 +43,7 @@ public class RoomServiceImp implements RoomServiceI{
     @Override
     public void deleteRoom(Long idRoom) {
         roomRepository.deleteById(idRoom);}
+
     @Override
     public void assignMembershiptoRoom(Long idRoom, Long idFMembership) {
         Room room = roomRepository.findById(idRoom).orElse(null);

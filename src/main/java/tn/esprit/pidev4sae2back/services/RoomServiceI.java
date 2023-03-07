@@ -14,9 +14,11 @@ public interface RoomServiceI {
     Room retrieveRoom(Long idRoom);
 
     void deleteRoom(Long idRoom);
+
     public void assignMembershiptoRoom(Long idRoom, Long idFmembership) ;
 
     public List<Room> getEmpty();
     public List<Room> getFull();
 
 }
+
