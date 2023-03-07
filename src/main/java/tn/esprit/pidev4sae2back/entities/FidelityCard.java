@@ -25,7 +25,7 @@ public class FidelityCard {
     @Column(name = "idFidelityCard", nullable = false)
     private Long idFidelityCard;
 
-    @Column(name = "card_number", nullable = false)
+    @Column(name = "card_number", unique = true , nullable = false)
     private Long cardNumber;
 
     @Enumerated(EnumType.STRING)
@@ -39,12 +39,12 @@ public class FidelityCard {
     private LocalDate expirationDate;
 
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "fidelityCard")
+    @OneToMany(mappedBy = "fidelityCard",cascade = CascadeType.ALL)
     private List<FidelityTransaction> transactions;
 
     @JsonIgnore

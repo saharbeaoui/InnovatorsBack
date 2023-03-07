@@ -14,13 +14,13 @@ public interface FidelityCardServiceI {
 
     List<FidelityCard> retrieveAllFidelityCard();
 
-    FidelityCard updateFidelityCard(FidelityCard fidelityCard);
+    FidelityCard updateFidelityCard(FidelityCard fidelityCard,Long userId);
 
     void removeFidelityCard(Long idFidelityCard);
 
-    FidelityCard updateMemberShipLevelFidelityCard(FidelityCard fidelityCard);
+    FidelityCard updateMemberShipLevelFidelityCard(Long fidelityCardId);
 
-    MembershipLevel getMembershipLevel(FidelityCard fd);
+    MembershipLevel getMembershipLevel(Long fidelityCardId);
 
     MembershipLevel getMembershipLevelByUser(Long userId);
 
