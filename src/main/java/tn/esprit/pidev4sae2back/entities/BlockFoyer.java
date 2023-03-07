@@ -33,7 +33,7 @@ public class BlockFoyer {
     private String placement;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "blockFoyer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "blockFoyer", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private Set<Room> rooms = new LinkedHashSet<>();
 
     @JsonIgnore

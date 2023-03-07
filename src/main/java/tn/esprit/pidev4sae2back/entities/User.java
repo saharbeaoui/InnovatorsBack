@@ -80,4 +80,8 @@ public class User {
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Claim> claimResponse = new LinkedHashSet<>();
 
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private WaitingList waitingList;
+
 }

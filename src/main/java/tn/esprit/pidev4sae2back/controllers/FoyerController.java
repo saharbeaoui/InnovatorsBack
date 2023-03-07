@@ -2,6 +2,7 @@ package tn.esprit.pidev4sae2back.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.pidev4sae2back.entities.FNameBlock;
 import tn.esprit.pidev4sae2back.entities.Foyer;
 import tn.esprit.pidev4sae2back.services.FoyerServiceI;
 
@@ -39,4 +40,15 @@ public class FoyerController {
     public void removeFoyer(@PathVariable Long idFoyer) {
         foyerServiceI.removeFoyer(idFoyer);
     }
-}
+
+
+    @GetMapping("/nbPlaceDisponiblePERBLOC/{idFoyer}/{idBlock}")
+    public Integer nbPlaceDisponiblePERBLOC(Long idFoyer,Long idBlock){
+        return foyerServiceI.nbPlaceDisponiblePERBLOC(idFoyer,idBlock);
+    }
+    @GetMapping("/isFullFoyer/{idFoyer}")
+    public Boolean isFullFoyer(Long idFoyer){
+        return foyerServiceI.isFullFoyer(idFoyer);
+    }
+
+    }
