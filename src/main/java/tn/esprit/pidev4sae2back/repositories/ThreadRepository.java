@@ -6,4 +6,5 @@ import tn.esprit.pidev4sae2back.entities.Thread;
 
 @Repository
 public interface ThreadRepository extends JpaRepository<Thread, Long> {
+    long count();
 }

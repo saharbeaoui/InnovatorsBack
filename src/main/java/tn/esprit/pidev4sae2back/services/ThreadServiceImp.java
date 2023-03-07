@@ -37,4 +37,6 @@ public class ThreadServiceImp implements ThreadServiceI{
     public void deleteThread(Long idThread) {
         threadRepository.deleteById(idThread);
     }
+
+
 }
