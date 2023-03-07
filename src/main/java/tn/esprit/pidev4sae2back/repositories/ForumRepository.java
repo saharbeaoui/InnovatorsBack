@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import tn.esprit.pidev4sae2back.entities.Forum;
 
 @Repository
-public interface ForumRepository extends JpaRepository<Forum, Long> {
+public interface ForumRepository extends JpaRepository<Forum,Long> {
 }

@@ -26,7 +26,7 @@ public class Room {
     private Integer bedNbr;
 
     @Column(name = "archived", nullable = false)
-    private boolean archived;
+    private boolean archived=false;
 
     @JsonIgnore
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,4 +37,18 @@ public class Room {
     @JoinColumn(name = "block_foyer_id_block")
     private BlockFoyer blockFoyer;
 
+    public void addFMembership(String s) {
+    }
+    public boolean isEmpty(){
+
+        return fMemberships.isEmpty();
+    }
+    public boolean isFull(){
+
+        return fMemberships.size() ==bedNbr;
+    }
+    public boolean TakenNotFull(){
+
+        return !isFull()&&!isEmpty();
+    }
 }

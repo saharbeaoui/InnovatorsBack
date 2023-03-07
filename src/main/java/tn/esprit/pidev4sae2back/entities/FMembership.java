@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +25,7 @@ public class FMembership {
     private Long idFMembership;
 
     @Column(name = "start_date")
-    private Timestamp startDate;
+    private Date startDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "duration")
@@ -31,6 +34,14 @@ public class FMembership {
     @Column(name = "price", nullable = false)
     private float price;
 
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "hobbie1")
+    private Hobbies hobbie1;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "hobbie2")
+    private Hobbies hobbie2;
 
     @JsonIgnore
     @ManyToOne(cascade = {CascadeType.ALL})
@@ -42,4 +53,14 @@ public class FMembership {
     @JoinColumn(name = "room_id_room")
     private Room room;
 
+
+    public List<Hobbies> getHobbies() {
+        ArrayList<Hobbies> hobbies = new ArrayList<>();
+        if(hobbie1!=null)
+        hobbies.add(hobbie1);
+        if(hobbie2!=null)
+            hobbies.add(hobbie2);
+
+        return hobbies;}
+    
 }
