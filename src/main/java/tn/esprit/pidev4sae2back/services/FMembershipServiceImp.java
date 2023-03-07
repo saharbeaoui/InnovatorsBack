@@ -40,7 +40,7 @@ public class FMembershipServiceImp implements FMembershipServiceI {
         Foyer foyer = fr.findById(idFoyer).orElse(null);
         User u = userRepository.findById(idUser).orElse(null);
         Set<BlockFoyer> blockFoyerList = foyer.getBlockFoyers();
-        WaitingList waitingList=new WaitingList();
+        WaitingList waitingList = new WaitingList();
 
         if (u.getSex() == Sex.FEMALE) {
             switch (u.getTypeUser()) {
@@ -49,70 +49,70 @@ public class FMembershipServiceImp implements FMembershipServiceI {
                     for (BlockFoyer blockFoyer : blockFoyerList) {
                         if (blockFoyer.getNameBlock().equals(fNameBlock)) {
                             if (foyerServiceI.nbPlaceDisponiblePERBLOC(idFoyer, blockFoyer.getIdBlock()) > 1) {
-                                Set<Room> rooms=blockFoyer.getRooms();
-                                for(Room room1:rooms){
-                                    if (room1.getBedNbr()>1){
+                                Set<Room> rooms = blockFoyer.getRooms();
+                                for (Room room1 : rooms) {
+                                    if (room1.getBedNbr() > 1) {
                                         fm.setUser(u);
                                         fm.setRoom(room1);
-                                        room1.setBedNbr(room1.getBedNbr()-1);
+                                        room1.setBedNbr(room1.getBedNbr() - 1);
                                         fMembershipRepository.save(fm);
                                         roomRepository.save(room1);
                                     }
                                 }
 
                             }
-                        }else {
+                        } else {
                             waitingList.setFNameBlock(fNameBlock);
                             waitingList.setCreatedDate(fm.getStartDate());
-                            waitingListServiceI.addToWaitingList(waitingList,u.getIdUser());
+                            waitingListServiceI.addToWaitingList(waitingList, u.getIdUser());
                         }
                     }
                     break;
                 case TEACHER:
                     fNameBlock = FNameBlock.FTEACHERS;
                     for (BlockFoyer blockFoyer : blockFoyerList) {
-                    if (blockFoyer.getNameBlock().equals(fNameBlock)) {
-                        if (foyerServiceI.nbPlaceDisponiblePERBLOC(idFoyer, blockFoyer.getIdBlock()) > 1) {
-                            Set<Room> rooms=blockFoyer.getRooms();
-                            for(Room room1:rooms){
-                                if (room1.getBedNbr()>1){
-                                    fm.setUser(u);
-                                    fm.setRoom(room1);
-                                    room1.setBedNbr(room1.getBedNbr()-1);
-                                    fMembershipRepository.save(fm);
-                                    roomRepository.save(room1);
-                                }
-                            }
-
-                        }
-                    }else {
-                        waitingList.setFNameBlock(fNameBlock);
-                        waitingList.setCreatedDate(fm.getStartDate());
-                        waitingListServiceI.addToWaitingList(waitingList,u.getIdUser());
-                    }
-                }
-                    break;
-                case GUEST:
-                    fNameBlock = FNameBlock.GUESTS;
-                    for (BlockFoyer blockFoyer : blockFoyerList) {
                         if (blockFoyer.getNameBlock().equals(fNameBlock)) {
                             if (foyerServiceI.nbPlaceDisponiblePERBLOC(idFoyer, blockFoyer.getIdBlock()) > 1) {
-                                Set<Room> rooms=blockFoyer.getRooms();
-                                for(Room room1:rooms){
-                                    if (room1.getBedNbr()>1){
+                                Set<Room> rooms = blockFoyer.getRooms();
+                                for (Room room1 : rooms) {
+                                    if (room1.getBedNbr() > 1) {
                                         fm.setUser(u);
                                         fm.setRoom(room1);
-                                        room1.setBedNbr(room1.getBedNbr()-1);
+                                        room1.setBedNbr(room1.getBedNbr() - 1);
                                         fMembershipRepository.save(fm);
                                         roomRepository.save(room1);
                                     }
                                 }
 
                             }
-                        }else {
+                        } else {
                             waitingList.setFNameBlock(fNameBlock);
                             waitingList.setCreatedDate(fm.getStartDate());
-                            waitingListServiceI.addToWaitingList(waitingList,u.getIdUser());
+                            waitingListServiceI.addToWaitingList(waitingList, u.getIdUser());
+                        }
+                    }
+                    break;
+                case GUEST:
+                    fNameBlock = FNameBlock.GUESTS;
+                    for (BlockFoyer blockFoyer : blockFoyerList) {
+                        if (blockFoyer.getNameBlock().equals(fNameBlock)) {
+                            if (foyerServiceI.nbPlaceDisponiblePERBLOC(idFoyer, blockFoyer.getIdBlock()) > 1) {
+                                Set<Room> rooms = blockFoyer.getRooms();
+                                for (Room room1 : rooms) {
+                                    if (room1.getBedNbr() > 1) {
+                                        fm.setUser(u);
+                                        fm.setRoom(room1);
+                                        room1.setBedNbr(room1.getBedNbr() - 1);
+                                        fMembershipRepository.save(fm);
+                                        roomRepository.save(room1);
+                                    }
+                                }
+
+                            }
+                        } else {
+                            waitingList.setFNameBlock(fNameBlock);
+                            waitingList.setCreatedDate(fm.getStartDate());
+                            waitingListServiceI.addToWaitingList(waitingList, u.getIdUser());
                         }
                     }
                     break;
@@ -124,22 +124,22 @@ public class FMembershipServiceImp implements FMembershipServiceI {
                     for (BlockFoyer blockFoyer : blockFoyerList) {
                         if (blockFoyer.getNameBlock().equals(fNameBlock)) {
                             if (foyerServiceI.nbPlaceDisponiblePERBLOC(idFoyer, blockFoyer.getIdBlock()) > 1) {
-                                Set<Room> rooms=blockFoyer.getRooms();
-                                for(Room room1:rooms){
-                                    if (room1.getBedNbr()>1){
+                                Set<Room> rooms = blockFoyer.getRooms();
+                                for (Room room1 : rooms) {
+                                    if (room1.getBedNbr() > 1) {
                                         fm.setUser(u);
                                         fm.setRoom(room1);
-                                        room1.setBedNbr(room1.getBedNbr()-1);
+                                        room1.setBedNbr(room1.getBedNbr() - 1);
                                         fMembershipRepository.save(fm);
                                         roomRepository.save(room1);
                                     }
                                 }
 
                             }
-                        }else {
+                        } else {
                             waitingList.setFNameBlock(fNameBlock);
                             waitingList.setCreatedDate(fm.getStartDate());
-                            waitingListServiceI.addToWaitingList(waitingList,u.getIdUser());
+                            waitingListServiceI.addToWaitingList(waitingList, u.getIdUser());
                         }
                     }
                     break;
@@ -148,22 +148,22 @@ public class FMembershipServiceImp implements FMembershipServiceI {
                     for (BlockFoyer blockFoyer : blockFoyerList) {
                         if (blockFoyer.getNameBlock().equals(fNameBlock)) {
                             if (foyerServiceI.nbPlaceDisponiblePERBLOC(idFoyer, blockFoyer.getIdBlock()) > 1) {
-                                Set<Room> rooms=blockFoyer.getRooms();
-                                for(Room room1:rooms){
-                                    if (room1.getBedNbr()>1){
+                                Set<Room> rooms = blockFoyer.getRooms();
+                                for (Room room1 : rooms) {
+                                    if (room1.getBedNbr() > 1) {
                                         fm.setUser(u);
                                         fm.setRoom(room1);
-                                        room1.setBedNbr(room1.getBedNbr()-1);
+                                        room1.setBedNbr(room1.getBedNbr() - 1);
                                         fMembershipRepository.save(fm);
                                         roomRepository.save(room1);
                                     }
                                 }
 
                             }
-                        }else {
+                        } else {
                             waitingList.setFNameBlock(fNameBlock);
                             waitingList.setCreatedDate(fm.getStartDate());
-                            waitingListServiceI.addToWaitingList(waitingList,u.getIdUser());
+                            waitingListServiceI.addToWaitingList(waitingList, u.getIdUser());
                         }
                     }
                     break;
@@ -172,28 +172,30 @@ public class FMembershipServiceImp implements FMembershipServiceI {
                     for (BlockFoyer blockFoyer : blockFoyerList) {
                         if (blockFoyer.getNameBlock().equals(fNameBlock)) {
                             if (foyerServiceI.nbPlaceDisponiblePERBLOC(idFoyer, blockFoyer.getIdBlock()) > 1) {
-                                Set<Room> rooms=blockFoyer.getRooms();
-                                for(Room room1:rooms){
-                                    if (room1.getBedNbr()>1){
+                                Set<Room> rooms = blockFoyer.getRooms();
+                                for (Room room1 : rooms) {
+                                    if (room1.getBedNbr() > 1) {
                                         fm.setUser(u);
                                         fm.setRoom(room1);
-                                        room1.setBedNbr(room1.getBedNbr()-1);
+                                        room1.setBedNbr(room1.getBedNbr() - 1);
                                         fMembershipRepository.save(fm);
                                         roomRepository.save(room1);
                                     }
                                 }
 
                             }
-                        }else {
+                        } else {
                             waitingList.setFNameBlock(fNameBlock);
                             waitingList.setCreatedDate(fm.getStartDate());
-                            waitingListServiceI.addToWaitingList(waitingList,u.getIdUser());
+                            waitingListServiceI.addToWaitingList(waitingList, u.getIdUser());
                         }
                     }
                     break;
             }
 
-        }return fm;
+        }
+        return fm;
+    }
 
     public FMembership addFMembership(FMembership fm) {
         return fMembershipRepository.save(fm);
