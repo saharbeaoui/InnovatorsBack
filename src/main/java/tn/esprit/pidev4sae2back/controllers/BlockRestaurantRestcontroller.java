@@ -46,4 +46,9 @@ public class BlockRestaurantRestcontroller {
     public void unarchiveBlock(@PathParam("blockrestau-id") Long idBlock){
         blockRestauServiceI.unarchiveBlock(idBlock);
     }
+    @PutMapping("/assigneBtoRes/{id-blockr}/{id-restau}")
+    @ResponseBody
+    public void assigneBtoRes(@PathVariable("id-blockr") Long idBlockr,@PathVariable("id-restau") Long idRestau ){
+        blockRestauServiceI.assignBlockRtoRestaurant(idBlockr,idRestau);
+    }
 }

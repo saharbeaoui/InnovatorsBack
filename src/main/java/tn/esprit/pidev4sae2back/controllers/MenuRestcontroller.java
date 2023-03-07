@@ -1,7 +1,9 @@
 package tn.esprit.pidev4sae2back.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.pidev4sae2back.entities.Meal;
 import tn.esprit.pidev4sae2back.entities.Menu;
 import tn.esprit.pidev4sae2back.services.MenuServiceI;
 
@@ -41,4 +43,27 @@ public class MenuRestcontroller {
     public void removemenu(@PathParam("menu-id")Long idMenu){
        menuServiceI.removeMenu(idMenu);
     }
+
+    @PutMapping("/assignMenutoRestaurant/{id-menu}/{id-restau}")
+    @ResponseBody
+    public void assignMenutoRestaurant(@PathVariable("id-menu") Long idMenu,@PathVariable("id-restau") Long idRestau ){
+        menuServiceI.assignMenutoRestaurant(idMenu,idRestau);
+
+    }
+    @GetMapping("/menus/{idMenu}/calories")
+    @ResponseBody
+    public List<Integer> getMenuCalories(@PathVariable("idMenu") Long idMenu) {
+        return menuServiceI.calculateMenuCalories(idMenu);
+    }
+    @GetMapping("/menu/validate/{IdMenu}")
+    public ResponseEntity<String> validateMenu(@PathVariable Long IdMenu, @RequestParam int minCalories, @RequestParam int maxCalories) {
+        boolean isValid = menuServiceI.isValidMenu(IdMenu,minCalories,maxCalories);
+        if (isValid) {
+            return ResponseEntity.ok("Menu is valid.");
+        } else {
+            return ResponseEntity.badRequest().body("Menu is not valid.");
+        }
+    }
+
+
 }

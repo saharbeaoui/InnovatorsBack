@@ -40,7 +40,7 @@ public class Menu {
     @JoinColumn(name = "restaurant_id_restau")
     private Restaurant restaurant;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Meal> meals = new LinkedHashSet<>();
 
