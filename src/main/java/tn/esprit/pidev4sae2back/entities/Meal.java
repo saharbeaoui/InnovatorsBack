@@ -26,7 +26,7 @@ public class Meal {
     @Column(name = "description")
     private String description; //Text
 
-    @JsonIgnore
+
     @OneToOne
     @JoinColumn(name = "nutrition_information_id_nut")
     private NutritionInformation nutritionInformation;

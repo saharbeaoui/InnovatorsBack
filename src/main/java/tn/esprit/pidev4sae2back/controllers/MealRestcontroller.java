@@ -8,6 +8,8 @@ import tn.esprit.pidev4sae2back.entities.Meal;
 import tn.esprit.pidev4sae2back.entities.NutritionInformation;
 import tn.esprit.pidev4sae2back.entities.User;
 import tn.esprit.pidev4sae2back.repositories.UserRepository;
+import tn.esprit.pidev4sae2back.services.HarrisServiceI;
+import tn.esprit.pidev4sae2back.services.HarrisServiceImp;
 import tn.esprit.pidev4sae2back.services.MealServiceI;
 import tn.esprit.pidev4sae2back.services.NutritionInformationServiceI;
 import tn.esprit.pidev4sae2back.utils.MealEmailService;
@@ -24,6 +26,9 @@ public class MealRestcontroller {
     NutritionInformationServiceI nutritionInformationServiceI;
     MealEmailService mealEmailService;
     UserRepository userRepository;
+
+    HarrisServiceI harrisService;
+
 
     @GetMapping("/retrieveAllMeals")
     @ResponseBody
@@ -84,6 +89,17 @@ public class MealRestcontroller {
 
 
     }
+    @GetMapping("/daily")
+    public NutritionInformation getDailyNutrition(@RequestParam int weight, @RequestParam int height, @RequestParam int age,
+            @RequestParam String gender) {
+        NutritionInformation nutrition = harrisService.calculateDailyNutrition(weight, height, age,gender);
+
+        return nutrition;
+    }
+
+
+
+
    // @Scheduled(cron = "* * * * * ?")
     //public void sendMenuToUsers(){
       //  List<User> users = userRepository.findAll();;

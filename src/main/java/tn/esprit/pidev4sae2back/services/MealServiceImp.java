@@ -70,9 +70,5 @@ public class MealServiceImp implements MealServiceI{
         mealRepository.save(meal);
 
     }
-    //@Override
-    //public List<Menu> getMenuForToday() {
-      //  LocalDate today = LocalDate.now();
-        //return menuRepository.findByDate(today);
-    //}
+
 }
