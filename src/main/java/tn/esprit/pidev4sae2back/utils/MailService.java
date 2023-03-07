@@ -22,6 +22,7 @@ import java.util.List;
 @Service
 
 public class MailService implements MealEmailService{
+
     @Autowired
     MealRepository mealRepository;
     @Autowired
@@ -30,10 +31,6 @@ public class MailService implements MealEmailService{
     private String from;
 
 
-
-
-    @Autowired
-    private JavaMailSender mailSender;
 
 
     public void sendMembershipValidationEmail(String email) throws MessagingException {
