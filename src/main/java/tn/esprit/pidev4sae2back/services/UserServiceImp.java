@@ -6,6 +6,7 @@ import tn.esprit.pidev4sae2back.entities.User;
 import tn.esprit.pidev4sae2back.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImp implements UserServiceI{
@@ -31,6 +32,12 @@ public class UserServiceImp implements UserServiceI{
     @Override
     public void delete(Long id) {
         ur.deleteById(id);
+    }
+
+    @Override
+    public User retrieveUser(Long userId) {
+        Optional<User> userOptional = ur.findById(userId);
+        return userOptional.orElse(null);
     }
 
 

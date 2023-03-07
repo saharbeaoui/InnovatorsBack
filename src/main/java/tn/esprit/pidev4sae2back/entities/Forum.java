@@ -22,6 +22,8 @@ public class Forum {
     @Column(name = "idForum", nullable = false)
     private Long idForum;
 
+    @Column(name = "title")
+    private String title;
     @Column(name = "topic")
     private String topic;
 

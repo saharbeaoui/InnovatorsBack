@@ -29,6 +29,13 @@ public class MailService implements MealEmailService{
     @Value("${spring.mail.username}")
     private String from;
 
+
+
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+
     public void sendMembershipValidationEmail(String email) throws MessagingException {
 
         MimeMessage message = mailSender.createMimeMessage();

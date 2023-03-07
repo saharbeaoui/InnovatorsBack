@@ -34,8 +34,12 @@ public class Foyer {
     @Column(name = "adress")
     private String adress;
 
+    @Column(name = "capacity")
+    private Integer capacity;
+
+
     @JsonIgnore
-    @OneToMany(mappedBy = "foyer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "foyer", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private Set<BlockFoyer> blockFoyers = new LinkedHashSet<>();
 
 }

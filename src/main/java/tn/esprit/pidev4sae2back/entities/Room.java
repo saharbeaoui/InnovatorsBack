@@ -37,4 +37,19 @@ public class Room {
     @JoinColumn(name = "block_foyer_id_block")
     private BlockFoyer blockFoyer;
 
+
+    public void addFMembership(String s) {
+    }
+    public boolean isEmpty(){
+
+        return fMemberships.isEmpty();
+    }
+    public boolean isFull(){
+
+        return fMemberships.size() ==bedNbr;
+    }
+    public boolean TakenNotFull(){
+
+        return !isFull()&&!isEmpty();
+    }
 }
