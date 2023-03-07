@@ -4,7 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidev4sae2back.entities.FMembership;
+import tn.esprit.pidev4sae2back.services.FMembershipServiceI;
 import tn.esprit.pidev4sae2back.services.FMembershipServiceImp;
+import tn.esprit.pidev4sae2back.services.RoomServiceI;
+import tn.esprit.pidev4sae2back.services.RoomServiceImp;
+
 
 import java.util.List;
 
@@ -13,31 +17,40 @@ import java.util.List;
 @RequestMapping("/fMembership")
 public class FMembershipController {
     @Autowired
-    FMembershipServiceImp fMembershipServiceImp;
 
-    //http://localhost:8082/test/fmembership/retrieveAllFMembership
+    FMembershipServiceI fMembershipServiceI;
+    RoomServiceI roomServiceI;
+
+    //http://localhost:8090/test/fmembership/retrieveAllFMembership
     @GetMapping("/retrieveFMembership")
     public List<FMembership> retrieveAllFoyers(){
-        return fMembershipServiceImp.retrieveAllFMembership();
+        return fMembershipServiceI.retrieveAllFMembership();
     }
-    //http://localhost:8082/test/fmembership/addFmembership
-    @PostMapping("/addFmembership")
-    public FMembership addFMembership (@RequestBody FMembership fm) {return fMembershipServiceImp.addFMembership(fm);}
-    //http://localhost:8082/test/fmembership/updatefmembership
+    @PostMapping("/addFMembership/{idUser}/{idFoyer}")
+    public FMembership addFMembership (@RequestBody FMembership fm,@PathVariable ("idFoyer") Long idFoyer,@PathVariable ("idUser") Long idUser)
+    {
+        FMembership fmr=fMembershipServiceI.addFMembership(fm,idUser,idFoyer);
+
+        return fmr ;}
+
 
     @PutMapping("/updateFMembership")
-    public FMembership updateFMembership(@RequestBody FMembership fm) {return fMembershipServiceImp.updateFMembership(fm);
+    public FMembership updateFMembership(@RequestBody FMembership fm) {return fMembershipServiceI.updateFMembership(fm);
     }
 
-    //http://localhost:8082/test/fmembership/Fmembership/{idFMembership}
-    @GetMapping("/Fmembership/{idFMembership}")
+
+    @GetMapping("/FMembership/{idFMembership}")
     public  FMembership retrieveFMembership(@PathVariable(value = "idFMembership") Long idFMembership) {
-        return fMembershipServiceImp.retrieveFMembership(idFMembership);
+        return fMembershipServiceI.retrieveFMembership(idFMembership);
     }
-    //http://localhost:8082/test/fmembership/deleteFMmembership/{idFMembership}
-    @DeleteMapping("/deleteFmembership/{idFMmembership}")
-    public void deleteFmembership(@PathVariable("idFMmembership")Long idFMmembership){
-        fMembershipServiceImp.deleteFMembership(idFMmembership);
+
+    @DeleteMapping("/deleteFMembership/{idFMembership}")
+    public void deleteFMembership(@PathVariable("idFMembership")Long idFMembership){
+        fMembershipServiceI.deleteFMembership(idFMembership);
+    }
+    @PutMapping("/freeBedAndRoomAfterMembershipEnds/{idFMembership}")
+    public void freeBedAndRoomAfterMembershipEnds(@PathVariable("idFMembership") Long idFMembership) {
+        fMembershipServiceI.freeBedAndRoomAfterMembershipEnds(idFMembership);
     }
 
 }

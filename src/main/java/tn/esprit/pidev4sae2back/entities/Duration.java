@@ -1,5 +1,7 @@
 package tn.esprit.pidev4sae2back.entities;
 
 public enum Duration {
-    DAY,MONTH,SEMESTER,YEAR
+    DAY,MONTH,SEMESTER,YEAR, ONE_MONTH;
+
+
 }
