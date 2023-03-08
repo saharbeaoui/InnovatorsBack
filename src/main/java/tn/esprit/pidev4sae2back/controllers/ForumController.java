@@ -1,6 +1,8 @@
 package tn.esprit.pidev4sae2back.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidev4sae2back.entities.Forum;
 import tn.esprit.pidev4sae2back.entities.ForumStatisticsDTO;
@@ -8,6 +10,7 @@ import tn.esprit.pidev4sae2back.entities.Thread;
 import tn.esprit.pidev4sae2back.repositories.ForumRepository;
 import tn.esprit.pidev4sae2back.services.ForumServiceImp;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/forum")
 
-public class ForumController {
+public class ForumController extends BaseController<Forum, Long>{
     ForumServiceImp forumServiceImp;
     ForumRepository forumRepository;
 
@@ -45,27 +48,15 @@ public class ForumController {
 
     //http://localhost:8082/test/forum/addForum
     @PostMapping("/addForum")
-    public Forum addForum(@RequestBody Forum f) {
+    ResponseEntity<Forum> addForum(@RequestBody Forum f)throws IOException {
+        System.out.printf(f.toString());
+        return new ResponseEntity<>(forumServiceImp.addForum(f), HttpStatus.CREATED);
 
-        String title = f.getTitle();
-        String topic = f.getTopic();
-
-        // Vérification de la présence de mots interdits dans le titre et le sujet
-        if (containsForbiddenWords(title) || containsForbiddenWords(topic)) {
-            // Lever une exception avec un message d'erreur personnalisé
-            throw new IllegalArgumentException("Le titre ou le sujet contient un langage offensant.");
-        }
-
-        // Enregistrer le forum dans la base de données
-        forumRepository.save(f);
-
-        // Retourner le forum enregistré
-        return f;
     }
     //http://localhost:8082/test/forum/updateForum
     @PutMapping("/updateForum")
-    public Forum updateForum(@RequestBody Forum f) {
-        return forumServiceImp.updateForum(f);
+    ResponseEntity<Forum> updateForum(@RequestBody Forum f) throws IOException {
+        return new ResponseEntity<>(forumServiceImp.updateForum(f), HttpStatus.OK);
     }
     //http://localhost:8082/test/forum/retrieveForum/{idForum}
     @GetMapping("/retrieveForum/{idForum}")
@@ -84,7 +75,7 @@ public class ForumController {
     }
     @PostMapping("/{forumId}/threads")
     public Thread addThreadToForum(@PathVariable Long forumId, @RequestBody Thread threadRequest) {
-        return forumServiceImp.addThreadToForum(forumId, threadRequest.getTitle(), threadRequest.getDescription());
+        return forumServiceImp.addThreadToForum(forumId,  threadRequest.getDescription());
     }
 
 }
