@@ -48,8 +48,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     public User getByusername(String username);
 
 
-}
-
     List<User> getAllByTypeUser(TypeUser typeUser);
 }
 
