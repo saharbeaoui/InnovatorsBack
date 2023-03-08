@@ -27,6 +27,7 @@ public class UserServiceImp implements UserServiceI{
 
     @Override
     public User update(User user, Long idUser) {
+        user.setIdUser(idUser);
         return ur.save(user);
     }
 
