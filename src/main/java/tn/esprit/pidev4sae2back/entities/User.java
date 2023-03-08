@@ -2,16 +2,12 @@ package tn.esprit.pidev4sae2back.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -28,6 +24,9 @@ public class User {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "user_name")
+    private String username;
 
     @Column(name = "email")
     private String email;
@@ -50,6 +49,10 @@ public class User {
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
+
+    private String resetPasswordToken;
+
+    private boolean state;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sex")
@@ -74,4 +77,61 @@ public class User {
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Claim> claimResponse = new LinkedHashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+
+    public User() {
+    }
+
+    public User(String username, String email, String password, boolean state) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.state = state;
+    }
+
+    public User(String username, String email, String password, String firstName,String lastName,Long phone) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNum = phone;
+
+    }
+
+    public User(String username,String firstName,String lastName ,String email,Long phone, String password) {
+        this.username = username;
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.email = email;
+        this.phoneNum=phone;
+        this.password = password;
+    }
+
+    public User(String username, String email, String password, boolean state,String firstName,String lastName, Long phone) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.state = state;
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.phoneNum=phone;
+
+    }
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public boolean getState() {
+        return state;
+    }
 }
+

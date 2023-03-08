@@ -2,6 +2,7 @@ package tn.esprit.pidev4sae2back.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.pidev4sae2back.entities.Role;
 import tn.esprit.pidev4sae2back.entities.User;
 import tn.esprit.pidev4sae2back.services.UserServiceI;
 import tn.esprit.pidev4sae2back.services.UserServiceImp;
@@ -30,11 +31,15 @@ public class UserController {
     public List<User> getAllUsers(){
         return  us.getAllUsers();
     }
-    @PostMapping("update-user")
+
+
+
+    @PostMapping("updateUser/{idUser}")
     @ResponseBody
-    public User UpdateEtudiant(@RequestBody User user){
-        return  us.update(user);
+    User update(@RequestBody User user, @PathVariable Long idUser){
+        return us.update(user, idUser);
     }
+
 
     @DeleteMapping("delete-user/{id}")
     @ResponseBody
