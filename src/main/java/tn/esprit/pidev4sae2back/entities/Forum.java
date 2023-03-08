@@ -1,12 +1,11 @@
 package tn.esprit.pidev4sae2back.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -15,20 +14,24 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Data
 @Table(name = "forum")
-public class Forum {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idForum", nullable = false)
-    private Long idForum;
+public class Forum extends BaseEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "title")
     private String title;
     @Column(name = "topic")
     private String topic;
+    @Column(name = "image")
+    private String image;
 
     @JsonIgnore
     @OneToMany(mappedBy = "forum", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Thread> threads = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "forum")
+    @JsonIgnore
+    private Set<Reaction> reactions;
 }

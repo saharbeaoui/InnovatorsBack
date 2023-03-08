@@ -5,17 +5,21 @@ import org.springframework.stereotype.Service;
 import tn.esprit.pidev4sae2back.entities.Forum;
 import tn.esprit.pidev4sae2back.entities.ForumStatisticsDTO;
 import tn.esprit.pidev4sae2back.entities.Thread;
+import tn.esprit.pidev4sae2back.exception.BadWordException;
+import tn.esprit.pidev4sae2back.helpers.BadWordFilter;
 import tn.esprit.pidev4sae2back.repositories.ForumRepository;
 import tn.esprit.pidev4sae2back.repositories.ThreadRepository;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ForumServiceImp implements ForumServiceI{
+public class ForumServiceImp extends BaseService<Forum, Long> implements ForumServiceI {
     ForumRepository forumRepository;
     ThreadRepository threadRepository;
+    BadWordFilter badWordFilter;
 
     public List<Forum> searchForums(String query) {
         return forumRepository.findByTitleContainingIgnoreCaseOrTopicContainingIgnoreCaseOrderByTitleAsc(query, query);
@@ -26,12 +30,18 @@ public class ForumServiceImp implements ForumServiceI{
     }
 
     @Transactional
-    public Forum addForum(Forum f) {
+    public Forum addForum(Forum f)throws IOException {
+        if (badWordFilter.checkBadWord(f.getTopic()))
+            throw new BadWordException("Bad word detected");
+
         return forumRepository.save(f);
     }
 
     @Override
-    public Forum updateForum(Forum f) {
+    public Forum updateForum(Forum f)throws IOException {
+        if (badWordFilter.checkBadWord(f.getTopic()))
+            throw new BadWordException("Bad word detected");
+
         return forumRepository.save(f);
     }
 
@@ -60,10 +70,10 @@ public class ForumServiceImp implements ForumServiceI{
     }
 
     @Override
-    public Thread addThreadToForum(Long forumId, String title, String description) {
+    public Thread addThreadToForum(Long forumId,  String description) {
         Forum forum = forumRepository.findById(forumId).orElseThrow(() -> new RuntimeException("Forum not found"));
         Thread thread = new Thread();
-        thread.setTitle(title);
+
         thread.setDescription(description);
         thread.setForum(forum);
         return threadRepository.save(thread);
