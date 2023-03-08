@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,13 +34,27 @@ public class Restaurant {
     @Column(name = "adress")
     private String adress;
 
+    @Column(name = "archived")
+    private boolean archived;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RMembership> rMemberships = new LinkedHashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BlockRestau> blockRestaus = new LinkedHashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Menu> menus = new LinkedHashSet<>();
+
+    public void archive() {
+        this.archived = true;
+    }
+
+    public void unarchive() {
+        this.archived = false;
+    }
 
 }

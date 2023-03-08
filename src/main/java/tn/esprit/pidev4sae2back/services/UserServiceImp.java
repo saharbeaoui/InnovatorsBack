@@ -7,6 +7,7 @@ import tn.esprit.pidev4sae2back.entities.User;
 import tn.esprit.pidev4sae2back.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImp implements UserServiceI{
@@ -37,6 +38,7 @@ public class UserServiceImp implements UserServiceI{
     }
 
     @Override
+
     public void updatePassword(User user, String newPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(newPassword);
@@ -86,6 +88,11 @@ public class UserServiceImp implements UserServiceI{
     @Override
     public List<User> getManagers() {
         return null;
+
+    public User retrieveUser(Long userId) {
+        Optional<User> userOptional = ur.findById(userId);
+        return userOptional.orElse(null);
+
     }
 
 

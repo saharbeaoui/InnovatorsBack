@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,12 @@ public class Foyer {
     @Column(name = "adress")
     private String adress;
 
-    @OneToMany(mappedBy = "foyer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "capacity")
+    private Integer capacity;
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "foyer", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private Set<BlockFoyer> blockFoyers = new LinkedHashSet<>();
 
 }

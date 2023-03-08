@@ -14,6 +14,7 @@ public interface UserServiceI {
 
     void delete(Long id);
 
+
     void updatePassword(User user, String newPassword) ;
 
     User getByResetPasswordToken(String token);
@@ -29,4 +30,7 @@ public interface UserServiceI {
     int numberofactiveusers();
 
     List<User> getManagers();
+
+    User retrieveUser(Long userId);
+
 }

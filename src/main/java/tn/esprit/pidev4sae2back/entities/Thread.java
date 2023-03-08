@@ -1,11 +1,11 @@
 package tn.esprit.pidev4sae2back.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @AllArgsConstructor
@@ -13,27 +13,31 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "thread")
-public class Thread {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idThread", nullable = false)
-    private Long idThread;
+public class Thread extends BaseEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    @Column(name = "title")
-    private String title;
+
 
     @Column(name = "description")
     private String description; //TEXT
 
-    @Column(name = "date")
-    private Timestamp date;
+
+    @Enumerated(EnumType.STRING)
+
+    CommentType type;
 
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id_user")
     private User user;
+    @ManyToOne
+    private Thread parent;
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "forum_id_forum")
     private Forum forum;

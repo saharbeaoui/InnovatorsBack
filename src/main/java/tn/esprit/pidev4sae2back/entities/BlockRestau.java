@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,8 +30,20 @@ public class BlockRestau {
     @Column(name = "placement")
     private String placement;
 
+    @Column(name = "archived")
+    private boolean archived;
+
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "restaurant_id_restau")
     private Restaurant restaurant;
+
+    public void archiveBlock() {
+        this.archived = true;
+    }
+
+    public void unarchiveBlock() {
+        this.archived = false;
+    }
 
 }

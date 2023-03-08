@@ -1,5 +1,6 @@
 package tn.esprit.pidev4sae2back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,10 +37,12 @@ public class Claim {
     @Column(name = "solved", nullable = false)
     private boolean solved;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id_user")
     private User user;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "admin_id_user")
     private User admin;
