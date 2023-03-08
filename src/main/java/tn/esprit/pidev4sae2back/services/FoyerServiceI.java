@@ -1,9 +1,7 @@
 package tn.esprit.pidev4sae2back.services;
 import java.util.List;
 
-import tn.esprit.pidev4sae2back.entities.FNameBlock;
-import tn.esprit.pidev4sae2back.entities.Foyer;
-import tn.esprit.pidev4sae2back.entities.User;
+import tn.esprit.pidev4sae2back.entities.*;
 
 public interface FoyerServiceI {
     Foyer addFoyer(Foyer foyer);
@@ -22,4 +20,7 @@ public interface FoyerServiceI {
     Boolean isFullFoyer(Long idFoyer);
 
     void handleFMembershipRequest(User user);
+
+    public List<Foyer> searchFoyers(String name, Integer capacity);
+    public List<FMembership> searchMembershipByDuration(Duration duration);
     }
