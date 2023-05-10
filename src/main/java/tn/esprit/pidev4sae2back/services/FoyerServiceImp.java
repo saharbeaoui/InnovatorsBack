@@ -80,7 +80,7 @@ public class FoyerServiceImp implements FoyerServiceI {
         return null;
     }
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 3000)
     public void checkFoyerFullness() {
         Long idFoyer = 1L;
         Foyer f = fr.findById(idFoyer).orElse(null);
@@ -100,6 +100,30 @@ public class FoyerServiceImp implements FoyerServiceI {
             } else {
                 log.info("Foyer without Blocs");
             }
+        }
+    }
+
+
+
+    @Override
+    public List<FMembership> searchMembershipByDuration(Duration duration){
+        return fr.findByDuration(duration);
+    }
+
+    @Override
+    public List<Foyer> searchFoyers(String name, Integer capacity) {
+        if (name != null && capacity != null) {
+            // Search by both name and capacity
+            return fr.findByNameContainingAndCapacity(name, capacity);
+        } else if (name != null) {
+            // Search by name only
+            return fr.findByNameContaining(name);
+        } else if (capacity != null) {
+            // Search by capacity only
+            return fr.findByCapacity(capacity);
+        } else {
+            // Return empty list if no search parameters are provided
+            return new ArrayList<Foyer>();
         }
     }
 

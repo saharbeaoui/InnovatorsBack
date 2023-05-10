@@ -12,9 +12,7 @@ import tn.esprit.pidev4sae2back.repositories.RestaurantRepository;
 
 import javax.transaction.Transactional;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -46,9 +44,12 @@ public class MenuServiceImp implements MenuServiceI{
 
     @Override
     public Menu updateMenu(Menu menu) {
-        return menuRepository.save(menu);
+        Restaurant currentRestau = menu.getRestaurant();
+        Menu updatedmenu = menuRepository.save(menu);
+        updatedmenu.setRestaurant(currentRestau);
+        updatedmenu = menuRepository.save(updatedmenu);
+        return updatedmenu;
     }
-
     @Override
     public Menu retrieveMenu(Long idMenu) {
         return menuRepository.findById(idMenu).get();
@@ -71,7 +72,7 @@ public class MenuServiceImp implements MenuServiceI{
 
 
     }
-    public List<Integer> calculateMenuCalories(Long idMenu) {
+    public Map<String,Integer> calculateMenuCalories(Long idMenu) {
         Menu menu = menuRepository.findById(idMenu).orElseThrow(() -> new RuntimeException("Menu not found"));
         int totalCalories = 0;
         int totalproteine = 0;
@@ -83,13 +84,13 @@ public class MenuServiceImp implements MenuServiceI{
             totalcarb += meal.getNutritionInformation().getCarbohydrates();
             totalfat += meal.getNutritionInformation().getFat();
         }
-        List<Integer> nutlist = new ArrayList<Integer>();
-        nutlist.add(totalCalories);
-        nutlist.add(totalproteine);
-        nutlist.add(totalcarb);
-        nutlist.add(totalfat);
+        Map<String, Integer> nutritionInfo = new HashMap<>();
+        nutritionInfo.put("calories", totalCalories);
+        nutritionInfo.put("protein", totalproteine);
+        nutritionInfo.put("carbs", totalcarb);
+        nutritionInfo.put("fat", totalfat);
+        return nutritionInfo;
 
-        return nutlist ;
     }
     public boolean isValidMenu(Long idMenu, int minCalories, int maxCalories) {
         Menu menu = menuRepository.findById(idMenu)

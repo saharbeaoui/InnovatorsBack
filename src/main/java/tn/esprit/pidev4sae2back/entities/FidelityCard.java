@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -50,5 +51,25 @@ public class FidelityCard {
     @JsonIgnore
     @OneToMany(mappedBy = "fidelityCard", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reward> rewards = new LinkedHashSet<>();
+
+
+
+    public void setCardNumber() {
+        Random random = new Random();
+        Long newCardNumber = random.nextLong();
+        while (newCardNumber.equals(cardNumber)) {
+            newCardNumber = random.nextLong();
+        }
+        cardNumber = newCardNumber;
+    }
+
+
+    public long getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(long cardNumber) {
+        this.cardNumber = cardNumber;
+    }
 
 }

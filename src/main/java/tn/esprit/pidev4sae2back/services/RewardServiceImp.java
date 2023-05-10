@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidev4sae2back.entities.*;
 import tn.esprit.pidev4sae2back.repositories.FidelityCardRepository;
+import tn.esprit.pidev4sae2back.repositories.RMembershipRepository;
 import tn.esprit.pidev4sae2back.repositories.RewardRepository;
 import tn.esprit.pidev4sae2back.utils.MailServiceReward;
 
@@ -33,6 +34,9 @@ public class RewardServiceImp implements RewardServiceI{
 
     @Autowired
     RMembershipServiceI rMembershipServiceI;
+
+    @Autowired
+    RMembershipRepository rMembershipRepository;
 
 
     @Override
@@ -118,21 +122,26 @@ public class RewardServiceImp implements RewardServiceI{
         FidelityCard fidelityCard= fcr.findById(fidelityCardId).orElseThrow(()-> new RuntimeException("Fidelity Card not found"));
         if (fidelityCard.getMembershipLevel()==MembershipLevel.GOLD){
             addRewardIfGoldMembership(fidelityCardId);
-            RMembership rMembership= rMembershipServiceI.getLastMembership(fidelityCard.getUser());
-            rMembership.setEndDate(rMembership.getEndDate().plusMonths(6));
+            RMembership rMembership= rMembershipServiceI.getLastMembership(fidelityCard.getUser().getIdUser());
+
+            rMembershipServiceI.renewMembership(rMembership.getIdRMembership(),Duration.SEMESTER,TypeMembership.FULLPENSION);
             fidelityCardServiceI.updateMemberShipLevelFidelityCard(fidelityCardId);
+            rMembershipRepository.save(rMembership);
         }
         if (fidelityCard.getMembershipLevel()==MembershipLevel.SILVER){
             addRewardIfSILVERMembership(fidelityCardId);
-            RMembership rMembership= rMembershipServiceI.getLastMembership(fidelityCard.getUser());
-            rMembership.setEndDate(rMembership.getEndDate().plusMonths(1));
+            RMembership rMembership= rMembershipServiceI.getLastMembership(fidelityCard.getUser().getIdUser());
+            rMembershipServiceI.renewMembership(rMembership.getIdRMembership(),Duration.MONTH,TypeMembership.FULLPENSION);
             fidelityCardServiceI.updateMemberShipLevelFidelityCard(fidelityCardId);
+            rMembershipRepository.save(rMembership);
+
         }
         if (fidelityCard.getMembershipLevel()==MembershipLevel.BRONZE){
             addRewardIfBRONZEMembership(fidelityCardId);
-            RMembership rMembership= rMembershipServiceI.getLastMembership(fidelityCard.getUser());
-            rMembership.setEndDate(rMembership.getEndDate().plusDays(1));
+            RMembership rMembership= rMembershipServiceI.getLastMembership(fidelityCard.getUser().getIdUser());
+            rMembershipServiceI.renewMembership(rMembership.getIdRMembership(),Duration.DAY,TypeMembership.FULLPENSION);
             fidelityCardServiceI.updateMemberShipLevelFidelityCard(fidelityCardId);
+            rMembershipRepository.save(rMembership);
         }else{
             log.info("None Level");
         }

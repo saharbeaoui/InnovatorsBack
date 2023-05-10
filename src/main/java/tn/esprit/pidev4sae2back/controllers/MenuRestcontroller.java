@@ -9,6 +9,7 @@ import tn.esprit.pidev4sae2back.services.MenuServiceI;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -52,7 +53,7 @@ public class MenuRestcontroller {
     }
     @GetMapping("/menus/{idMenu}/calories")
     @ResponseBody
-    public List<Integer> getMenuCalories(@PathVariable("idMenu") Long idMenu) {
+    public Map<String,Integer> getMenuCalories(@PathVariable("idMenu") Long idMenu) {
         return menuServiceI.calculateMenuCalories(idMenu);
     }
     @GetMapping("/menu/validate/{IdMenu}")

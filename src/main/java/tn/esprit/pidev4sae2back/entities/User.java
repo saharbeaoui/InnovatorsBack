@@ -68,7 +68,7 @@ public class User {
     private Set<FMembership> fMemberships = new LinkedHashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<RMembership> rMembership = new LinkedHashSet<>();
 
     @JsonIgnore

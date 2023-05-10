@@ -94,6 +94,12 @@ public class FidelityCardServiceImp implements FidelityCardServiceI {
     }
 
     @Override
+    public int getTotalPointsByUser(Long userId) {
+        User u = ur.findById(userId).orElse(null);
+        return u.getFidelityCard().getTotalPoints();
+    }
+
+    @Override
     public FidelityCard updateMemberShipLevelFidelityCard(Long fidelityCardId){
         FidelityCard f = fcr.findById(fidelityCardId).orElse(null);
         f.setMembershipLevel(getMembershipLevel(fidelityCardId));
@@ -107,5 +113,10 @@ public class FidelityCardServiceImp implements FidelityCardServiceI {
     }
 
 
+    @Override
+    public String showUserFullNameOfAFidelityCard(Long fidelityCardId){
+        FidelityCard f = fcr.findById(fidelityCardId).orElse(null);
+        return f.getUser().getLastName()+" "+f.getUser().getFirstName();
+    }
 
 }

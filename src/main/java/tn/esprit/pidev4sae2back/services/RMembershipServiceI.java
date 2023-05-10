@@ -13,7 +13,7 @@ public interface RMembershipServiceI {
     RMembership addRMembership(RMembership rMembership);
     RMembership addRMembershipWithVerify(RMembership rMembership,long idStudent);
     List<RMembership> retrieveAllRMemberships();
-    RMembership updateRMembership(RMembership rMembership);
+    RMembership updateRMembership(Long idRMembership ,LocalDateTime startDate,TypeMembership tm,Duration d);
     RMembership retrieveRMembership(Long idRMembership);
     void removeRMembership(Long idRMembership);
     List<RMembership> retrieveAllRMembershipsValidated();
@@ -24,12 +24,12 @@ public interface RMembershipServiceI {
     List<RMembership> listeRMembershipsSTUDENTS(Long idRestaurant);
     List<RMembership> listeRMembershipsTEACHERS(Long idRestaurant);
     List<RMembership> RMembershipValidesBETWEEN(LocalDateTime startDate, LocalDateTime endDate);
-    long nbRMembershipValidesBETWEEN(LocalDateTime startDate, LocalDateTime endDate);
+    int nbRMembershipValidesBETWEEN(LocalDateTime startDate, LocalDateTime endDate);
 
 
     List<RMembership> findAllByUser(Long idUser);
 
-    RMembership getLastMembership(User user);
+    RMembership getLastMembership(Long userId);
 
     RMembership renewMembership(Long membershipId, Duration duration, TypeMembership typeMembership);
 
@@ -39,5 +39,5 @@ public interface RMembershipServiceI {
 
     Map<TypeUser, Double> getRevenuePerROLE();
 
-    Double getRevenueTOTAL();
+    int getRevenueTOTAL();
 }
