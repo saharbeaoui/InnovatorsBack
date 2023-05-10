@@ -9,6 +9,7 @@ import tn.esprit.pidev4sae2back.repositories.*;
 import tn.esprit.pidev4sae2back.utils.MailService;
 
 import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,8 +24,12 @@ public class RMembershipServiceImp implements RMembershipServiceI{
     @Autowired
     RMembershipRepository rmr;
 
+
     @Autowired
     RestaurantRepository rr;
+
+    @Autowired
+    FidelityCardRepository fcr;
 
     @Autowired
     UserRepository ur;
@@ -37,6 +42,9 @@ public class RMembershipServiceImp implements RMembershipServiceI{
 
     @Autowired
     RUserTransactionRepository utr;
+
+    @Autowired
+    FidelityTransactionRepository ftr;
 
 
     @Autowired
@@ -72,20 +80,30 @@ public class RMembershipServiceImp implements RMembershipServiceI{
     @Override
     public RMembership addRMembershipWithVerify(RMembership rMembership,long idStudent) {
         rMembership = setEndDate(rMembership);
-        User u = ur.findById(idStudent).get();
+        User u = ur.findById(idStudent).orElse(null);
         List<RMembership> lurm = rmr.findByUser(u);
         for (RMembership urm : lurm){
             if (datesOverlap(urm.getStartDate(),urm.getEndDate(),rMembership.getStartDate(),rMembership.getEndDate())){
                 return null;
             }
         }
-        Restaurant r = rr.findAll().get(0);
+        Restaurant r = rr.findAll(). get(0);
         rMembership.setRestaurant(r);
         rMembership.setUser(u);
         rMembership.setValidated(false);
         rMembership.setHasRenewed(false);
         rMembership.setPrice(br.getTotalCostWhere(rMembership.getTypeMembership(),rMembership.getDuration(),u.getTypeUser()));
         rmr.save(rMembership);
+
+
+        FidelityCard fidelityCard = new FidelityCard();
+        fidelityCard.setUser(u);
+        fidelityCard.setCardNumber();
+        fidelityCard.setExpirationDate(LocalDate.now().plusYears(2));
+        fidelityCard.setTotalPoints(0);
+        fidelityCard.setMembershipLevel(MembershipLevel.NONE);
+        fcr.save(fidelityCard);
+
         RUserTransaction rUserTransaction = new RUserTransaction();
         rUserTransaction.setTransactionDate(rMembership.getStartDate());
         rUserTransaction.setTransactionAmount(rMembership.getPrice());
@@ -104,8 +122,14 @@ public class RMembershipServiceImp implements RMembershipServiceI{
     }
 
     @Override
-    public RMembership updateRMembership(RMembership rMembership) {
-        return rmr.save(rMembership);
+    public RMembership updateRMembership(Long idRMembership ,LocalDateTime startDate,TypeMembership tm,Duration d) {
+        RMembership r =rmr.findById(idRMembership).orElse(null);
+        r.setDuration(d);
+        r.setTypeMembership(tm);
+        r.setStartDate(startDate);
+        r=setEndDate(r);
+        r.setPrice(br.getTotalCostWhere(r.getTypeMembership(),r.getDuration(),r.getUser().getTypeUser()));
+        return rmr.save(r);
     }
 
     @Override
@@ -123,7 +147,7 @@ public class RMembershipServiceImp implements RMembershipServiceI{
         RMembership rMembership = rmr.findById(idRMembership).orElse(null);
         rMembership.validate();
         rmr.save(rMembership);
-        ms.sendMembershipValidationEmail(rMembership.getUser().getEmail());
+        //ms.sendMembershipValidationEmail(rMembership.getUser().getEmail());
     }
 
     @Override
@@ -148,7 +172,6 @@ public class RMembershipServiceImp implements RMembershipServiceI{
         Restaurant r = rr.findById(idRestaurant).orElse(null);
 
         List<RMembership> RMembershipsGUESTS = rmr.findAllByRestaurantAndUser_TypeUser(r, TypeUser.GUEST);
-        List<RMembership> RMembershipsTEACHERS = rmr.findAllByRestaurantAndUser_TypeUser(r, TypeUser.TEACHER);
         return RMembershipsGUESTS;
     }
     @Override
@@ -174,11 +197,12 @@ public class RMembershipServiceImp implements RMembershipServiceI{
     }
 
     @Override
-    public long nbRMembershipValidesBETWEEN(LocalDateTime startDate, LocalDateTime endDate) {
+    public int nbRMembershipValidesBETWEEN(LocalDateTime startDate, LocalDateTime endDate) {
 
-       return rmr.findRMembershipBetweenTwoDates(startDate,endDate).size();
+       return rmr.findAllByStartDateBetween(startDate,endDate).size();
     }
 
+    @Transactional
     @Scheduled(fixedRate = 30000)
     public void twoDaysLeftWarning(){
         List<RMembership> lrm = rmr.findAll();
@@ -195,7 +219,8 @@ public class RMembershipServiceImp implements RMembershipServiceI{
     }
 
     @Override
-    public RMembership getLastMembership(User user) {
+    public RMembership getLastMembership(Long userId) {
+        User user = ur.findById(userId).orElse(null);
         Set<RMembership> memberships = user.getRMembership();
         if (memberships == null || memberships.isEmpty()) {
             log.info("User have no Membership");
@@ -223,18 +248,51 @@ public class RMembershipServiceImp implements RMembershipServiceI{
         rMembership.setStartDate(today);
         if (duration == Duration.DAY) {
             rMembership.setEndDate(today.plusDays(1));
+            rMembership.getUser().getFidelityCard().setTotalPoints(rMembership.getUser().getFidelityCard().getTotalPoints()+10);
+            FidelityTransaction fidelityTransaction = new FidelityTransaction();
+            fidelityTransaction.setTransactionType(TransactionType.EARN_POINTS);
+            fidelityTransaction.setPoints(10);
+            fidelityTransaction.setFidelityCard(rMembership.getUser().getFidelityCard());
+            fidelityTransaction.setTransactionDate(LocalDateTime.now());
+
+
+            rMembership.getUser().getFidelityCard().getTransactions().add(fidelityTransaction);
         }
         if (duration == Duration.MONTH) {
             rMembership.setEndDate(today.plusMonths(1));
+            FidelityTransaction fidelityTransaction = new FidelityTransaction();
+            fidelityTransaction.setTransactionType(TransactionType.EARN_POINTS);
+            fidelityTransaction.setPoints(40);
+            fidelityTransaction.setFidelityCard(rMembership.getUser().getFidelityCard());
+            fidelityTransaction.setTransactionDate(LocalDateTime.now());
+
+
+            rMembership.getUser().getFidelityCard().getTransactions().add(fidelityTransaction);
         }
         if (duration == Duration.SEMESTER) {
             rMembership.setEndDate(today.plusMonths(6));
+            FidelityTransaction fidelityTransaction = new FidelityTransaction();
+            fidelityTransaction.setTransactionType(TransactionType.EARN_POINTS);
+            fidelityTransaction.setPoints(70);
+            fidelityTransaction.setFidelityCard(rMembership.getUser().getFidelityCard());
+            fidelityTransaction.setTransactionDate(LocalDateTime.now());
+
+
+            rMembership.getUser().getFidelityCard().getTransactions().add(fidelityTransaction);
         }
         if (duration == Duration.YEAR) {
             rMembership.setEndDate(today.plusYears(1));
+            FidelityTransaction fidelityTransaction = new FidelityTransaction();
+            fidelityTransaction.setTransactionType(TransactionType.EARN_POINTS);
+            fidelityTransaction.setPoints(130);
+            fidelityTransaction.setFidelityCard(rMembership.getUser().getFidelityCard());
+            fidelityTransaction.setTransactionDate(LocalDateTime.now());
+
+
+            rMembership.getUser().getFidelityCard().getTransactions().add(fidelityTransaction);
         }
 
-            rMembership.setValidated(true);
+            rMembership.setValidated(false);
             rMembership.setPrice(br.getTotalCostWhere(typeMembership, duration, rMembership.getUser().getTypeUser()));
 
             rMembership.setRenewalCount(rMembership.getRenewalCount() + 1);
@@ -283,7 +341,7 @@ public class RMembershipServiceImp implements RMembershipServiceI{
 
 
     @Override
-    public Map<Long, Double> getRevenuePerUSER() {
+    public Map<Long, Double>  getRevenuePerUSER() {
         List<RUserTransaction> transactions = utr.findAll();
         Map<Long, Double> revenuePerUSER = new HashMap<>();
 
@@ -351,12 +409,12 @@ public class RMembershipServiceImp implements RMembershipServiceI{
     }
 
     @Override
-    public Double getRevenueTOTAL() {
+    public int getRevenueTOTAL() {
         List<RUserTransaction> transactions = utr.findAll();
-          Double total = null;
+          int total = 0;
         for (RUserTransaction transaction : transactions) {
             double transactionAmount = transaction.getTransactionAmount();
-          total=transactionAmount+transactionAmount;
+          total+=transactionAmount;
 
         }
         return total;

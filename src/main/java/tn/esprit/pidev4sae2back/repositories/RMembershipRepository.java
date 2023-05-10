@@ -1,13 +1,13 @@
 package tn.esprit.pidev4sae2back.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import tn.esprit.pidev4sae2back.entities.RMembership;
-import tn.esprit.pidev4sae2back.entities.Restaurant;
-import tn.esprit.pidev4sae2back.entities.TypeUser;
-import tn.esprit.pidev4sae2back.entities.User;
+import tn.esprit.pidev4sae2back.entities.*;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,4 +28,7 @@ public interface RMembershipRepository extends JpaRepository<RMembership, Long> 
     public List<RMembership> findByUser(User u);
 
     public List<RMembership> findAllByUserIdUser(Long idUser);
+
+
+
 }

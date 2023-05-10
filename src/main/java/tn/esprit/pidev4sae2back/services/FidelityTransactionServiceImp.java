@@ -25,6 +25,9 @@ public class FidelityTransactionServiceImp implements FidelityTransactionService
     @Autowired
     UserRepository ur;
 
+    @Autowired
+    FidelityCardServiceI fidelityCardServiceI;
+
 
 
     @Override
@@ -42,6 +45,7 @@ public class FidelityTransactionServiceImp implements FidelityTransactionService
                 }
             }
             transaction.setFidelityCard(card);
+            fidelityCardServiceI.updateMemberShipLevelFidelityCard(card.getIdFidelityCard());
             fcr.save(card);
             transaction.setTransactionDate(LocalDateTime.now());
             return ftr.save(transaction);

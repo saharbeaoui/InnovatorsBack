@@ -16,6 +16,7 @@
     <properties>
         <java.version>1.8</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -101,8 +102,8 @@
             <artifactId>spring-context-support</artifactId>
             <version>4.0.1.RELEASE</version>
         </dependency>
-
     </dependencies>
+
 
 
     <build>

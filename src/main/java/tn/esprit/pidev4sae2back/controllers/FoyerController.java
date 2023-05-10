@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.pidev4sae2back.entities.Duration;
 import tn.esprit.pidev4sae2back.entities.FMembership;
+import tn.esprit.pidev4sae2back.entities.FNameBlock;
 import tn.esprit.pidev4sae2back.entities.Foyer;
 import tn.esprit.pidev4sae2back.entities.User;
 import tn.esprit.pidev4sae2back.services.FoyerServiceI;
@@ -49,11 +50,11 @@ public class FoyerController {
     public Integer nbPlaceDisponiblePERBLOC(Long idFoyer,Long idBlock){
         return foyerServiceI.nbPlaceDisponiblePERBLOC(idFoyer,idBlock);
     }
+  
     @GetMapping("/isFullFoyer/{idFoyer}")
     public Boolean checkFoyerFullness(@PathVariable Long idFoyer){
         return foyerServiceI.isFullFoyer(idFoyer);
     }
-
 
     @GetMapping("/searchfoyer")
     public List<Foyer> searchFoyers(
@@ -64,9 +65,10 @@ public class FoyerController {
 
     @GetMapping("/searchmembership")
     public ResponseEntity<List<FMembership>> searchMembershipByDuration(
-            @RequestParam (value = "duration",required = false)Duration duration) {
+            @RequestParam (value = "duration",required = false) Duration duration) {
         List<FMembership> fMemberships = foyerServiceI.searchMembershipByDuration(duration);
         return ResponseEntity.ok(fMemberships);
     }
 
 }
+

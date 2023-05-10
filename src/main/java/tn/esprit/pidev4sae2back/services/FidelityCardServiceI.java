@@ -18,6 +18,8 @@ public interface FidelityCardServiceI {
 
     void removeFidelityCard(Long idFidelityCard);
 
+    int getTotalPointsByUser(Long userId);
+
     FidelityCard updateMemberShipLevelFidelityCard(Long fidelityCardId);
 
     MembershipLevel getMembershipLevel(Long fidelityCardId);
@@ -25,4 +27,6 @@ public interface FidelityCardServiceI {
     MembershipLevel getMembershipLevelByUser(Long userId);
 
     int showTotalPointsByUser(Long userId);
+
+    String showUserFullNameOfAFidelityCard(Long fidelityCardId);
 }

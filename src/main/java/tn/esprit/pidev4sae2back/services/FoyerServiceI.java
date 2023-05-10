@@ -19,6 +19,10 @@ public interface FoyerServiceI {
 
     Boolean isFullFoyer(Long idFoyer);
 
+    List<FMembership> searchMembershipByDuration(Duration duration);
+
+    List<Foyer> searchFoyers(String name, Integer capacity);
+
     void handleFMembershipRequest(User user);
 
     public List<Foyer> searchFoyers(String name, Integer capacity);

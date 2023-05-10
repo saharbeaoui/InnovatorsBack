@@ -1,5 +1,4 @@
 package tn.esprit.pidev4sae2back.repositories;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,10 +34,5 @@ public interface FoyerRepository extends JpaRepository<Foyer, Long> {
     List<Foyer> findByNameContainingAndCapacity(@Param("name") String name, @Param("capacity") Integer capacity);
     @Query("SELECT fm FROM FMembership fm WHERE fm.duration = :duration")
     List<FMembership> findByDuration(@Param("duration") Duration duration);
-
-
-
-
-
 
 }
