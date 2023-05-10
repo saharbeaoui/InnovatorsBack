@@ -27,6 +27,7 @@ public class UserServiceImp implements UserServiceI{
 
     @Override
     public User update(User user, Long idUser) {
+        user.setIdUser(idUser);
         return ur.save(user);
     }
 
@@ -70,10 +71,7 @@ public class UserServiceImp implements UserServiceI{
 
     }
 
-    @Override
-    public User getUserById(Long userID) {
-        return null;
-    }
+
 
     @Override
     public int numberofusers() {
@@ -96,5 +94,9 @@ public class UserServiceImp implements UserServiceI{
 
     }
 
+    @Override
+    public User getUserById(Long userID) {
+        return this.ur.findById(userID).get();
+    }
 
 }
