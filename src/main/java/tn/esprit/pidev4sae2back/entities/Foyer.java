@@ -1,6 +1,7 @@
 package tn.esprit.pidev4sae2back.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,7 @@ public class Foyer {
 
 
     @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "foyer", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private Set<BlockFoyer> blockFoyers = new LinkedHashSet<>();
 

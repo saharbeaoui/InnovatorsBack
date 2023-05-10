@@ -90,6 +90,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private FidelityCard fidelityCard;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private WaitingList waitingList;
 
     public User() {
     }
@@ -143,14 +148,10 @@ public class User {
 
 
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
-    private FidelityCard fidelityCard;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private WaitingList waitingList;
 
 
 
 
-}
+
+
 

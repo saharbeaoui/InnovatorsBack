@@ -5,15 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.pidev4sae2back.entities.*;
+import tn.esprit.pidev4sae2back.repositories.FMembershipRepository;
 import tn.esprit.pidev4sae2back.repositories.FoyerRepository;
+import tn.esprit.pidev4sae2back.repositories.UserRepository;
 
+import javax.persistence.TypedQuery;
 import java.util.*;
+
 @Service
 @Slf4j
 public class FoyerServiceImp implements FoyerServiceI {
     @Autowired
     FoyerRepository fr;
-
+FMembershipRepository fm;
 
     @Override
     public Foyer addFoyer(Foyer foyer){
@@ -101,6 +105,7 @@ public class FoyerServiceImp implements FoyerServiceI {
                 log.info("Foyer without Blocs");
             }
         }
+
     }
 
 
@@ -168,5 +173,30 @@ public class FoyerServiceImp implements FoyerServiceI {
                         }*/
                     }
                 }
-            }}}
+            }}
+
+
+
+    public List<FMembership> searchMembershipByDuration(Duration duration){
+        return fr.findByDuration(duration);
+    }
+
+
+    public List<Foyer> searchFoyers(String name, Integer capacity) {
+        if (name != null && capacity != null) {
+            // Search by both name and capacity
+            return fr.findByNameContainingAndCapacity(name, capacity);
+        } else if (name != null) {
+            // Search by name only
+            return fr.findByNameContaining(name);
+        } else if (capacity != null) {
+            // Search by capacity only
+            return fr.findByCapacity(capacity);
+        } else {
+            // Return empty list if no search parameters are provided
+            return new ArrayList<Foyer>();
+        }
+    }
+
+}
 

@@ -79,10 +79,10 @@ public class WaitingListServiceImp implements WaitingListServiceI {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setFrom("nawrez.shili@esprit.tn");
+        helper.setFrom("rostom.chettaoui@esprit.tn");
         helper.setTo(email);
-        helper.setSubject("Free Place");
-        helper.setText("REMAKE ANOTHER MEMBERSHIP !");
+        helper.setSubject("DORM MEMBERSHIP");
+        helper.setText("free place!");
 
         mailSender.send(message);
     }

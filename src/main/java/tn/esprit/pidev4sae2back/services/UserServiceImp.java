@@ -87,6 +87,7 @@ public class UserServiceImp implements UserServiceI{
     public List<User> getManagers() {
         return null;
     }
+
     public User retrieveUser(Long userId) {
         Optional<User> userOptional = ur.findById(userId);
         return userOptional.orElse(null);
