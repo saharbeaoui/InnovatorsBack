@@ -7,6 +7,7 @@ import tn.esprit.pidev4sae2back.entities.Duration;
 import tn.esprit.pidev4sae2back.entities.FMembership;
 import tn.esprit.pidev4sae2back.entities.FNameBlock;
 import tn.esprit.pidev4sae2back.entities.Foyer;
+import tn.esprit.pidev4sae2back.entities.User;
 import tn.esprit.pidev4sae2back.services.FoyerServiceI;
 
 import java.util.List;
@@ -49,8 +50,9 @@ public class FoyerController {
     public Integer nbPlaceDisponiblePERBLOC(Long idFoyer,Long idBlock){
         return foyerServiceI.nbPlaceDisponiblePERBLOC(idFoyer,idBlock);
     }
+  
     @GetMapping("/isFullFoyer/{idFoyer}")
-    public Boolean isFullFoyer(Long idFoyer){
+    public Boolean checkFoyerFullness(@PathVariable Long idFoyer){
         return foyerServiceI.isFullFoyer(idFoyer);
     }
 

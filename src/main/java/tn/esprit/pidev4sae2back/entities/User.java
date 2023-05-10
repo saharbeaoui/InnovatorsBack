@@ -145,7 +145,7 @@ public class User {
     public boolean getState() {
         return state;
     }
-}
+
 
 
 

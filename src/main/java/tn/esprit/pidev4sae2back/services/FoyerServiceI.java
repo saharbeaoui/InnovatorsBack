@@ -24,4 +24,7 @@ public interface FoyerServiceI {
     List<Foyer> searchFoyers(String name, Integer capacity);
 
     void handleFMembershipRequest(User user);
+
+    public List<Foyer> searchFoyers(String name, Integer capacity);
+    public List<FMembership> searchMembershipByDuration(Duration duration);
     }

@@ -37,7 +37,7 @@ public class ForgotPasswordController {
 		UserRepository userRepository;
 	    
 	    @PostMapping("/forgot_password")
-	    public String processForgotPassword( Long idUser ,  String password) throws UserNotFoundException {
+					public String processForgotPassword( Long idUser ,  String password) throws UserNotFoundException {
 	    		User user = new User();
 	    		user = userRepository.getById(idUser);
 	    		String email = user.getEmail();

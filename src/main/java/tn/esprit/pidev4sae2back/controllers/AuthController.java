@@ -34,7 +34,8 @@ import tn.esprit.pidev4sae2back.payload.response.JwtResponse;
 import tn.esprit.pidev4sae2back.payload.response.MessageResponse;
 
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

@@ -21,9 +21,10 @@ public interface UserServiceI {
 
     public User getuser(String username);
 
+
     void updateResetPasswordToken(String token, String email)throws UserNotFoundException;
 
-    User getUserById(Long userID);
+    User getUserById(Long idUser);
 
     int numberofusers();
 
