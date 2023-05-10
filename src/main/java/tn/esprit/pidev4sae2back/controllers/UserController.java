@@ -43,11 +43,17 @@ public class UserController {
 
     @DeleteMapping("delete-user/{id}")
     @ResponseBody
-    public boolean DeleteEtudiant(@PathVariable("id") Long id){
+    public boolean DeleteUser(@PathVariable("id") Long id){
         us.delete(id);
         return true;
     }
 
+
+    @GetMapping("getUserById/{userID}")
+    @ResponseBody
+    User getUserById(@PathVariable Long userID){
+        return us.getUserById(userID);
+    }
 
 
 }

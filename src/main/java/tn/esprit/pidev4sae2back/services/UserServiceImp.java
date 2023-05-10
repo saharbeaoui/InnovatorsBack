@@ -71,10 +71,7 @@ public class UserServiceImp implements UserServiceI{
 
     }
 
-    @Override
-    public User getUserById(Long userID) {
-        return null;
-    }
+
 
     @Override
     public int numberofusers() {
@@ -89,12 +86,16 @@ public class UserServiceImp implements UserServiceI{
     @Override
     public List<User> getManagers() {
         return null;
-
+    }
     public User retrieveUser(Long userId) {
         Optional<User> userOptional = ur.findById(userId);
         return userOptional.orElse(null);
 
     }
 
+    @Override
+    public User getUserById(Long userID) {
+        return this.ur.findById(userID).get();
+    }
 
 }

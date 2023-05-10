@@ -76,7 +76,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/test/**").permitAll() // permit the class of test
                 .antMatchers("/**").permitAll() // permit all the routers after swagger-ui.html
                 .antMatchers("/user/activate/**").anonymous()
+                .antMatchers("/role/getRole/**").anonymous()
                 .anyRequest().authenticated();
+
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

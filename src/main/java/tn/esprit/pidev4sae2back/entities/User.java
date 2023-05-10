@@ -140,7 +140,7 @@ public class User {
     public boolean getState() {
         return state;
     }
-}
+
 
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
